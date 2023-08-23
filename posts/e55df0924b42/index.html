@@ -1,0 +1,493 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Java-day05 方法 | Tranquility</title><meta name="keywords" content="Java"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1. 方法概述1.1 方法的概念​    方法（method）是将具有独立功能的代码块组织成为一个整体，使其具有特殊功能的代码集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java-day05 方法">
+<meta property="og:url" content="https://leekoscn.github.io/posts/e55df0924b42/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="1. 方法概述1.1 方法的概念​    方法（method）是将具有独立功能的代码块组织成为一个整体，使其具有特殊功能的代码集">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/Java-Logo.jpg">
+<meta property="article:published_time" content="2022-07-16T05:49:36.000Z">
+<meta property="article:modified_time" content="2022-09-18T04:02:44.771Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/Java-Logo.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/e55df0924b42/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java-day05 方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-09-18 12:02:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/Java-Logo.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java-day05 方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-16T05:49:36.000Z" title="发表于 2022-07-16 13:49:36">2022-07-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-09-18T04:02:44.771Z" title="更新于 2022-09-18 12:02:44">2022-09-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Java-day05 方法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1-方法概述"><a href="#1-方法概述" class="headerlink" title="1. 方法概述"></a>1. 方法概述</h2><h3 id="1-1-方法的概念"><a href="#1-1-方法的概念" class="headerlink" title="1.1 方法的概念"></a>1.1 方法的概念</h3><p>​    方法（method）是将具有独立功能的代码块组织成为一个整体，使其具有特殊功能的代码集</p>
+<span id="more"></span>
+
+<ul>
+<li>注意：<ul>
+<li>方法必须先创建才可以使用，该过程成为方法定义</li>
+<li>方法创建后并不是直接可以运行的，需要手动使用后，才执行，该过程成为方法调用</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-方法的定义和调用"><a href="#2-方法的定义和调用" class="headerlink" title="2. 方法的定义和调用"></a>2. 方法的定义和调用</h2><h3 id="2-1-无参数方法定义和调用"><a href="#2-1-无参数方法定义和调用" class="headerlink" title="2.1 无参数方法定义和调用"></a>2.1 无参数方法定义和调用</h3><ul>
+<li><p>定义格式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> 方法名 (   ) &#123;</span><br><span class="line">	<span class="comment">// 方法体;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method</span> <span class="params">(    )</span> &#123;</span><br><span class="line">	<span class="comment">// 方法体;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用格式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">方法名();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">method();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意：</p>
+<p>​    方法必须先定义，后调用，否则程序将报错</p>
+</li>
+</ul>
+<h3 id="2-2-方法的调用过程"><a href="#2-2-方法的调用过程" class="headerlink" title="2.2 方法的调用过程"></a>2.2 方法的调用过程</h3><ul>
+<li>总结：每个方法在被调用执行的时候，都会进入栈内存，并且拥有自己独立的内存空间，方法内部代码调用完毕之后，会从栈内存中弹栈消失。</li>
+</ul>
+<h3 id="2-3-方法练习-奇偶数判断"><a href="#2-3-方法练习-奇偶数判断" class="headerlink" title="2.3 方法练习-奇偶数判断"></a>2.3 方法练习-奇偶数判断</h3><ul>
+<li>需求：判断一个数是奇数还是偶数</li>
+<li>代码：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo1Method</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        带参数方法的定义格式:</span></span><br><span class="line"><span class="comment">                public static void 方法名  ( 参数 )  &#123; … … &#125;</span></span><br><span class="line"><span class="comment">                public static void 方法名  ( 数据类型 变量名 )  &#123; … … &#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        带参数方法的调用格式:</span></span><br><span class="line"><span class="comment">                方法名 ( 参数 ) ;</span></span><br><span class="line"><span class="comment">                方法名 ( 变量名/常量值 ) ;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        tips: 参数可以是一个, 也可以是多个.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        需求: 判断一个数是奇数还是偶数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        isEvenNumber(<span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">isEvenNumber</span><span class="params">(<span class="type">int</span> num)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(num % <span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;偶数&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;奇数&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-带参数方法的定义和调用"><a href="#3-带参数方法的定义和调用" class="headerlink" title="3. 带参数方法的定义和调用"></a>3. 带参数方法的定义和调用</h2><h3 id="3-1-带参数方法定义和调用"><a href="#3-1-带参数方法定义和调用" class="headerlink" title="3.1 带参数方法定义和调用"></a>3.1 带参数方法定义和调用</h3><ul>
+<li><p>定义格式：</p>
+<p>参数：由数据类型和变量名组成 -  数据类型 变量名</p>
+<p>参数范例：int a</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> 方法名 (参数<span class="number">1</span>) &#123;</span><br><span class="line">	方法体;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> 方法名 (参数<span class="number">1</span>, 参数<span class="number">2</span>, 参数<span class="number">3.</span>..) &#123;</span><br><span class="line">	方法体;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">isEvenNumber</span><span class="params">(<span class="type">int</span> number)</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">getMax</span><span class="params">(<span class="type">int</span> num1, <span class="type">int</span> num2)</span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>注意：</p>
+<p>方法定义时，参数中的数据类型与变量名都不能缺少，缺少任意一个程序将报错</p>
+<pre><code>方法定义时，多个参数之间使用逗号( ，)分隔
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>调用格式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">方法名(参数)；</span><br><span class="line"></span><br><span class="line">方法名(参数<span class="number">1</span>,参数<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">isEvenNumber(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">getMax(<span class="number">10</span>,<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方法调用时，参数的数量与类型必须与方法定义中的设置相匹配，否则程序将报错</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-形参和实参"><a href="#3-2-形参和实参" class="headerlink" title="3.2 形参和实参"></a>3.2 形参和实参</h3><ol>
+<li>形参：方法定义中的参数</li>
+</ol>
+<p>​          等同于变量定义格式，例如：int number</p>
+<ol start="2">
+<li>实参：方法调用中的参数</li>
+</ol>
+<p>​          等同于使用变量或常量，例如： 10  number</p>
+<h3 id="3-3-带参数方法的练习-打印n-m之间所有的奇数"><a href="#3-3-带参数方法的练习-打印n-m之间所有的奇数" class="headerlink" title="3.3 带参数方法的练习-打印n-m之间所有的奇数"></a>3.3 带参数方法的练习-打印n-m之间所有的奇数</h3><ul>
+<li><p>需求：设计一个方法（print） 用于打印 n 到 m 之间所有的奇数</p>
+</li>
+<li><p>思路：</p>
+<p>​    1：定义方法，名称为print<br>​        2：为方法添加两个int类型的形参，准备接受调用者传递过来的实参<br>​        3：方法中设计for循环，循环从n开始，到m结束<br>​        4：循环中加入if判断，是奇数，则打印<br>​        5：main方法中调用print方法，传入两个实际参数</p>
+</li>
+<li><p>代码：</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.method2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo2Method</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 5：main方法中调用print方法，传入两个实际参数</span></span><br><span class="line">        print(<span class="number">20</span>,<span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1：定义方法，名称为print</span></span><br><span class="line">    <span class="comment">// 2：为方法添加两个int类型的形参，准备接受调用者传递过来的实参</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> m)</span>&#123;</span><br><span class="line">        System.out.println(n + <span class="string">&quot;到&quot;</span> + m + <span class="string">&quot;之间的奇数为:&quot;</span>);</span><br><span class="line">        <span class="comment">// 3：方法中设计for循环，循环从n开始，到m结束</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> n; i &lt;= m; i++)&#123;</span><br><span class="line">            <span class="comment">// 4：循环中加入if判断，是奇数，则打印</span></span><br><span class="line">            <span class="keyword">if</span>(i % <span class="number">2</span> == <span class="number">1</span>)&#123;</span><br><span class="line">                System.out.println(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-带返回值方法的定义和调用"><a href="#4-带返回值方法的定义和调用" class="headerlink" title="4. 带返回值方法的定义和调用"></a>4. 带返回值方法的定义和调用</h2><h3 id="4-1-带返回值方法定义和调用（掌握）"><a href="#4-1-带返回值方法定义和调用（掌握）" class="headerlink" title="4.1 带返回值方法定义和调用（掌握）"></a>4.1 带返回值方法定义和调用（掌握）</h3><ul>
+<li><p>定义格式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> 数据类型 方法名 ( 参数 ) &#123; </span><br><span class="line">	<span class="keyword">return</span> 数据 ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">isEvenNumber</span><span class="params">( <span class="type">int</span> number )</span> &#123;           </span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span> ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">getMax</span><span class="params">( <span class="type">int</span> a, <span class="type">int</span> b )</span> &#123;</span><br><span class="line">	<span class="keyword">return</span>  <span class="number">100</span> ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：<ul>
+<li>方法定义时return后面的返回值与方法定义上的数据类型要匹配，否则程序将报错</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>调用格式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">方法名 ( 参数 ) ;</span><br><span class="line">数据类型 变量名 = 方法名 ( 参数 ) ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>范例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">isEvenNumber ( <span class="number">5</span> ) ;</span><br><span class="line"><span class="type">boolean</span>  <span class="variable">flag</span> <span class="operator">=</span>  isEvenNumber ( <span class="number">5</span> ); </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注意：<ul>
+<li>方法的返回值通常会使用变量接收，否则该返回值将无意义</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-带返回值方法的练习-求两个数的最大值-应用"><a href="#4-2-带返回值方法的练习-求两个数的最大值-应用" class="headerlink" title="4.2 带返回值方法的练习-求两个数的最大值(应用)"></a>4.2 带返回值方法的练习-求两个数的最大值(应用)</h3><ul>
+<li><p>需求：设计一个方法可以获取两个数的较大值，数据来自于参数</p>
+</li>
+<li><p>思路：</p>
+<ol>
+<li>定义一个方法，声明两个形参接收计算的数值，求出结果并返回</li>
+<li>使用 if 语句 得出 a 和 b 之间的最大值，根据情况return具体结果</li>
+<li>在main()方法中调用定义好的方法并使用 【 变量保存 】</li>
+</ol>
+</li>
+<li><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment">        需求：设计一个方法可以获取两个数的较大值，数据来自于参数</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        1. 定义一个方法，声明两个形参接收计算的数值，求出结果并返回</span></span><br><span class="line"><span class="comment">        2. 使用 if 语句 得出 a 和 b 之间的最大值，根据情况return具体结果</span></span><br><span class="line"><span class="comment">        3. 在main()方法中调用定义好的方法并使用 【 变量保存 】</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 3. 在main()方法中调用定义好的方法并使用 【 变量保存 】</span></span><br><span class="line">        System.out.println(getMax(<span class="number">10</span>,<span class="number">20</span>));  <span class="comment">// 输出调用</span></span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> getMax(<span class="number">10</span>,<span class="number">20</span>);</span><br><span class="line">        System.out.println(result);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= result; i++)&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;HelloWorld&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 方法可以获取两个数的较大值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">getMax</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(a &gt; b)&#123;</span><br><span class="line">            <span class="keyword">return</span> a;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> b;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="5-方法的注意事项"><a href="#5-方法的注意事项" class="headerlink" title="5. 方法的注意事项"></a>5. 方法的注意事项</h2><h3 id="5-1-方法的通用格式（掌握）"><a href="#5-1-方法的通用格式（掌握）" class="headerlink" title="5.1 方法的通用格式（掌握）"></a>5.1 方法的通用格式（掌握）</h3><ul>
+<li><p>格式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> 返回值类型 方法名(参数) &#123;</span><br><span class="line">   方法体; </span><br><span class="line">   <span class="keyword">return</span> 数据 ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解释：</p>
+<ul>
+<li><p>public static     修饰符，目前先记住这个格式</p>
+<p>返回值类型    方法操作完毕之后返回的数据的数据类型</p>
+<p>​            如果方法操作完毕，没有数据返回，这里写void，而且方法体中一般不写return</p>
+<p> 方法名        调用方法时候使用的标识</p>
+<p> 参数        由数据类型和变量名组成，多个参数之间用逗号隔开</p>
+<p> 方法体        完成功能的代码块</p>
+<p> return        如果方法操作完毕，有数据返回，用于把数据返回给调用者</p>
+</li>
+</ul>
+</li>
+<li><p>定义方法时，要做到两个明确</p>
+<ul>
+<li>明确返回值类型：主要是明确方法操作完毕之后是否有数据返回，如果没有，写void；如果有，写对应的数据类型</li>
+<li>明确参数：主要是明确参数的类型和数量</li>
+</ul>
+</li>
+<li><p>调用方法时的注意：</p>
+<ul>
+<li>void类型的方法，直接调用即可</li>
+<li>非void类型的方法，推荐用变量接收调用</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-2-方法的注意事项"><a href="#5-2-方法的注意事项" class="headerlink" title="5.2 方法的注意事项"></a>5.2 方法的注意事项</h3><ul>
+<li><p>方法不能嵌套定义</p>
+<ul>
+<li><p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">methodOne</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">methodTwo</span><span class="params">()</span> &#123;</span><br><span class="line">       		<span class="comment">// 这里会引发编译错误!!!</span></span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>void表示无返回值，可以省略return，也可以单独的书写return，后面不加数据</p>
+<ul>
+<li><p>示例代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">methodTwo</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//return 100; 编译错误，因为没有具体返回值类型</span></span><br><span class="line">        <span class="keyword">return</span>;	</span><br><span class="line">        <span class="comment">//System.out.println(100); return语句后面不能跟数据或代码</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="6-方法重载"><a href="#6-方法重载" class="headerlink" title="6. 方法重载"></a>6. 方法重载</h2><h3 id="6-1-方法重载"><a href="#6-1-方法重载" class="headerlink" title="6.1 方法重载"></a>6.1 方法重载</h3><ul>
+<li><p>方法重载概念</p>
+<p>方法重载指同一个类中定义的多个方法之间的关系，满足下列条件的多个方法相互构成重载</p>
+<ul>
+<li>多个方法在同一个类中</li>
+<li>多个方法具有相同的方法名</li>
+<li>多个方法的参数不相同，类型不同或者数量不同</li>
+</ul>
+</li>
+<li><p>注意：</p>
+<ul>
+<li>重载仅对应方法的定义，与方法的调用无关，调用方式参照标准格式</li>
+<li>重载仅针对同一个类中方法的名称与参数进行识别，与返回值无关，换句话说不能通过返回值来判定两个方法是否相互构成重载</li>
+</ul>
+</li>
+<li><p>正确范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">fn</span><span class="params">(<span class="type">double</span> a)</span> &#123;</span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">float</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a , <span class="type">int</span> b)</span> &#123;</span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>错误范例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a)</span> &#123; 	<span class="comment">/*错误原因：重载与返回值无关*/</span></span><br><span class="line">    	<span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo01</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">fn</span><span class="params">(<span class="type">int</span> a)</span> &#123;</span><br><span class="line">        <span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodDemo02</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">fn</span><span class="params">(<span class="type">double</span> a)</span> &#123; <span class="comment">/*错误原因：这是两个类的两个fn方法*/</span></span><br><span class="line">        <span class="comment">//方法体</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="6-2-方法重载练习"><a href="#6-2-方法重载练习" class="headerlink" title="6.2 方法重载练习"></a>6.2 方法重载练习</h3><ul>
+<li><p>需求：使用方法重载的思想，设计比较两个整数是否相同的方法，兼容全整数类型（byte,short,int,long） </p>
+</li>
+<li><p>思路：</p>
+<p>​    ①定义比较两个数字的是否相同的方法compare()方法，参数选择两个int型参数</p>
+<p>​    ②定义对应的重载方法，变更对应的参数类型，参数变更为两个long型参数</p>
+<p>​    ③定义所有的重载方法，两个byte类型与两个short类型参数 </p>
+<p>​    ④完成方法的调用，测试运行结果 </p>
+</li>
+<li><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MethodTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//调用方法</span></span><br><span class="line">        System.out.println(compare(<span class="number">10</span>, <span class="number">20</span>));</span><br><span class="line">        System.out.println(compare((<span class="type">byte</span>) <span class="number">10</span>, (<span class="type">byte</span>) <span class="number">20</span>));</span><br><span class="line">        System.out.println(compare((<span class="type">short</span>) <span class="number">10</span>, (<span class="type">short</span>) <span class="number">20</span>));</span><br><span class="line">        System.out.println(compare(<span class="number">10L</span>, <span class="number">20L</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//int</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">compare</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;int&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> a == b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//byte</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">compare</span><span class="params">(<span class="type">byte</span> a, <span class="type">byte</span> b)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;byte&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> a == b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//short</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">compare</span><span class="params">(<span class="type">short</span> a, <span class="type">short</span> b)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;short&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> a == b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//long</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">compare</span><span class="params">(<span class="type">long</span> a, <span class="type">long</span> b)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;long&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> a == b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="7-方法的参数传递"><a href="#7-方法的参数传递" class="headerlink" title="7. 方法的参数传递"></a>7. 方法的参数传递</h2><h3 id="7-1-方法参数传递基本类型（理解）"><a href="#7-1-方法参数传递基本类型（理解）" class="headerlink" title="7.1 方法参数传递基本类型（理解）"></a>7.1 方法参数传递基本类型（理解）</h3><ul>
+<li><p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.param;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test1</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">         方法参数传递为基本数据类型 :</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">                传入方法中的, 是具体的数值.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">number</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;调用change方法前:&quot;</span> + number);</span><br><span class="line">        change(number);</span><br><span class="line">        System.out.println(<span class="string">&quot;调用change方法后:&quot;</span> + number);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">change</span><span class="params">(<span class="type">int</span> number)</span> &#123;</span><br><span class="line">        number = <span class="number">200</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结论：</p>
+<ul>
+<li><strong>基本数据类型的参数，形式参数的改变，不影响实际参数</strong></li>
+</ul>
+</li>
+<li><p>结论依据：</p>
+<ul>
+<li>每个方法在栈内存中，都会有独立的栈空间，方法运行结束后就会弹栈消失</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-2-方法参数传递引用类型"><a href="#7-2-方法参数传递引用类型" class="headerlink" title="7.2 方法参数传递引用类型"></a>7.2 方法参数传递引用类型</h3><ul>
+<li><p>测试代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.param;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test2</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">         方法参数传递为引用数据类型 :</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">                传入方法中的, 是内存地址.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>&#125;;</span><br><span class="line">        System.out.println(<span class="string">&quot;调用change方法前:&quot;</span> + arr[<span class="number">1</span>]);</span><br><span class="line">        change(arr);</span><br><span class="line">        System.out.println(<span class="string">&quot;调用change方法后:&quot;</span> + arr[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">change</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;</span><br><span class="line">        arr[<span class="number">1</span>] = <span class="number">200</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结论：</p>
+<ul>
+<li><strong>对于引用类型的参数，形式参数的改变，影响实际参数的值</strong></li>
+</ul>
+</li>
+<li><p>结论依据：</p>
+<p>引用数据类型的传参，传入的是地址值，内存中会造成两个引用指向同一个内存的效果，所以即使方法弹栈，堆内存中的数据也已经是改变后的结果</p>
+</li>
+</ul>
+<h3 id="7-3-数组遍历"><a href="#7-3-数组遍历" class="headerlink" title="7.3 数组遍历"></a>7.3 数组遍历</h3><ul>
+<li><p>需求：设计一个方法用于数组遍历，要求遍历的结果是在一行上的。例如：[11, 22, 33, 44, 55] </p>
+</li>
+<li><p>思路：</p>
+<ul>
+<li><p>因为要求结果在一行上输出，所以这里需要在学习一个新的输出语句System.out.print(“内容”);</p>
+<p>System.out.println(“内容”); 输出内容并换行</p>
+<p>System.out.print(“内容”); 输出内容不换行</p>
+<p>System.out.println(); 起到换行的作用</p>
+</li>
+<li><p>定义一个数组，用静态初始化完成数组元素初始化</p>
+</li>
+<li><p>定义一个方法，用数组遍历通用格式对数组进行遍历</p>
+</li>
+<li><p>用新的输出语句修改遍历操作</p>
+</li>
+<li><p>调用遍历方法</p>
+</li>
+</ul>
+</li>
+<li><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test1</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        需求：设计一个方法用于数组遍历，要求遍历的结果是在一行上的。例如：[11, 22, 33, 44, 55]</span></span><br><span class="line"><span class="comment">        思路：</span></span><br><span class="line"><span class="comment">            1.定义一个数组，用静态初始化完成数组元素初始化</span></span><br><span class="line"><span class="comment">            2.定义一个方法，对数组进行遍历</span></span><br><span class="line"><span class="comment">            3.遍历打印的时候，数据不换行</span></span><br><span class="line"><span class="comment">            4.调用遍历方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 1.定义一个数组，用静态初始化完成数组元素初始化</span></span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>, <span class="number">44</span>, <span class="number">55</span>&#125;;</span><br><span class="line">        <span class="comment">// 4.调用遍历方法</span></span><br><span class="line">        printArray(arr);</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;另外一段代码逻辑 &quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        2.定义一个方法，对数组进行遍历</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        1, 参数           int[] arr</span></span><br><span class="line"><span class="comment">        2, 返回值类型      void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printArray</span><span class="params">(<span class="type">int</span>[] arr)</span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.print(<span class="string">&quot;[&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(i == arr.length -<span class="number">1</span>)&#123;</span><br><span class="line">                <span class="comment">// 如果满足条件, 说明是最后一个元素, 最后一个元素, 特殊处理</span></span><br><span class="line">                System.out.println(arr[i] + <span class="string">&quot;]&quot;</span>);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">// 3.遍历打印的时候，数据不换行</span></span><br><span class="line">                System.out.print(arr[i] + <span class="string">&quot;, &quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-4-数组最大值"><a href="#7-4-数组最大值" class="headerlink" title="7.4 数组最大值"></a>7.4 数组最大值</h3><ul>
+<li><p>需求：设计一个方法用于获取数组中元素的最大值 </p>
+</li>
+<li><p>思路：</p>
+<ul>
+<li>①定义一个数组，用静态初始化完成数组元素初始化</li>
+<li>②定义一个方法，用来获取数组中的最大值，最值的认知和讲解我们在数组中已经讲解过了</li>
+<li>③调用获取最大值方法，用变量接收返回结果</li>
+<li>④把结果输出在控制台</li>
+</ul>
+</li>
+<li><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.itheima.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test2</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        需求：设计一个方法用于获取数组中元素的最大值</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        思路：</span></span><br><span class="line"><span class="comment">            1.定义一个数组，用静态初始化完成数组元素初始化</span></span><br><span class="line"><span class="comment">            2.定义一个方法，用来获取数组中的最大值</span></span><br><span class="line"><span class="comment">            3.调用获取最大值方法，用变量接收返回结果</span></span><br><span class="line"><span class="comment">            4.把结果输出在控制台</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 1.定义一个数组，用静态初始化完成数组元素初始化</span></span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">11</span>, <span class="number">55</span>, <span class="number">22</span>, <span class="number">44</span>, <span class="number">33</span>&#125;;</span><br><span class="line">        <span class="comment">// 3.调用获取最大值方法，用变量接收返回结果</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> getMax(arr);</span><br><span class="line">        <span class="comment">//  4.把结果输出在控制台</span></span><br><span class="line">        System.out.println(max);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        2.定义一个方法，用来获取数组中的最大值</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        1, 参数       int[] arr</span></span><br><span class="line"><span class="comment">        2, 返回值类型  int</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">getMax</span><span class="params">(<span class="type">int</span>[] arr)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> arr[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(max &lt; arr[i])&#123;</span><br><span class="line">                max = arr[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="7-5-方法同时获取数组最大值和最小值"><a href="#7-5-方法同时获取数组最大值和最小值" class="headerlink" title="7.5 方法同时获取数组最大值和最小值"></a>7.5 方法同时获取数组最大值和最小值</h3><ul>
+<li><p>需求：设计一个方法，该方法能够同时获取数组的最大值，和最小值</p>
+</li>
+<li><p>注意: return语句, 只能带回一个结果.     (想要返回多个值，可以返回数组)</p>
+</li>
+<li><p>代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test3</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        需求：设计一个方法，该方法能够同时获取数组的最大值，和最小值</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">        注意: return语句, 只能带回一个结果.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] arr = &#123;<span class="number">11</span>,<span class="number">55</span>,<span class="number">33</span>,<span class="number">22</span>,<span class="number">44</span>&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] maxAndMin = getMaxAndMin(arr);</span><br><span class="line"></span><br><span class="line">        System.out.println(maxAndMin[<span class="number">0</span>]);</span><br><span class="line">        System.out.println(maxAndMin[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span>[] getMaxAndMin(<span class="type">int</span>[] arr)&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> arr[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(max &lt; arr[i])&#123;</span><br><span class="line">                max = arr[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">min</span> <span class="operator">=</span> arr[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(min &gt; arr[i])&#123;</span><br><span class="line">                min = arr[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span>[] maxAndMin = &#123;min, max&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> maxAndMin;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/e55df0924b42/">https://leekoscn.github.io/posts/e55df0924b42/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="/img/Java-Logo.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/55d143688b6d/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Java-day06 Debug&amp;基础练习</div></div></a></div><div class="next-post pull-right"><a href="/posts/9c559e843108/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java-day04 IDEA&amp;数组</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/03b28ebc230d/" title="Java NIO"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-09-24</div><div class="title">Java NIO</div></div></a></div><div><a href="/posts/cc11ccf7d026/" title="Java-day01-java基础语法"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Java-day01-java基础语法</div></div></a></div><div><a href="/posts/145c06ba10b3/" title="Java-day03 switch&amp;循环语句"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Java-day03 switch&amp;循环语句</div></div></a></div><div><a href="/posts/55d143688b6d/" title="Java-day06 Debug&amp;基础练习"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Java-day06 Debug&amp;基础练习</div></div></a></div><div><a href="/posts/23739222c579/" title="Java-day02-Java基础语法"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Java-day02-Java基础语法</div></div></a></div><div><a href="/posts/27b0d0e04d99/" title="Java-day07 面向对象"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/Java-Logo.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-16</div><div class="title">Java-day07 面向对象</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%96%B9%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1. 方法概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%96%B9%E6%B3%95%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 方法的概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 方法的定义和调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%97%A0%E5%8F%82%E6%95%B0%E6%96%B9%E6%B3%95%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 无参数方法定义和调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 方法的调用过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%96%B9%E6%B3%95%E7%BB%83%E4%B9%A0-%E5%A5%87%E5%81%B6%E6%95%B0%E5%88%A4%E6%96%AD"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 方法练习-奇偶数判断</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B8%A6%E5%8F%82%E6%95%B0%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3. 带参数方法的定义和调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%B8%A6%E5%8F%82%E6%95%B0%E6%96%B9%E6%B3%95%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 带参数方法定义和调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BD%A2%E5%8F%82%E5%92%8C%E5%AE%9E%E5%8F%82"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 形参和实参</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%B8%A6%E5%8F%82%E6%95%B0%E6%96%B9%E6%B3%95%E7%9A%84%E7%BB%83%E4%B9%A0-%E6%89%93%E5%8D%B0n-m%E4%B9%8B%E9%97%B4%E6%89%80%E6%9C%89%E7%9A%84%E5%A5%87%E6%95%B0"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 带参数方法的练习-打印n-m之间所有的奇数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%B8%A6%E8%BF%94%E5%9B%9E%E5%80%BC%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">4. 带返回值方法的定义和调用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%B8%A6%E8%BF%94%E5%9B%9E%E5%80%BC%E6%96%B9%E6%B3%95%E5%AE%9A%E4%B9%89%E5%92%8C%E8%B0%83%E7%94%A8%EF%BC%88%E6%8E%8C%E6%8F%A1%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 带返回值方法定义和调用（掌握）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%B8%A6%E8%BF%94%E5%9B%9E%E5%80%BC%E6%96%B9%E6%B3%95%E7%9A%84%E7%BB%83%E4%B9%A0-%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC-%E5%BA%94%E7%94%A8"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 带返回值方法的练习-求两个数的最大值(应用)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">5. 方法的注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%9A%E7%94%A8%E6%A0%BC%E5%BC%8F%EF%BC%88%E6%8E%8C%E6%8F%A1%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 方法的通用格式（掌握）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 方法的注意事项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD"><span class="toc-number">6.</span> <span class="toc-text">6. 方法重载</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 方法重载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD%E7%BB%83%E4%B9%A0"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 方法重载练习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%96%B9%E6%B3%95%E7%9A%84%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-number">7.</span> <span class="toc-text">7. 方法的参数传递</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%EF%BC%88%E7%90%86%E8%A7%A3%EF%BC%89"><span class="toc-number">7.1.</span> <span class="toc-text">7.1 方法参数传递基本类型（理解）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E6%96%B9%E6%B3%95%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E5%BC%95%E7%94%A8%E7%B1%BB%E5%9E%8B"><span class="toc-number">7.2.</span> <span class="toc-text">7.2 方法参数传递引用类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E6%95%B0%E7%BB%84%E9%81%8D%E5%8E%86"><span class="toc-number">7.3.</span> <span class="toc-text">7.3 数组遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-%E6%95%B0%E7%BB%84%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="toc-number">7.4.</span> <span class="toc-text">7.4 数组最大值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5-%E6%96%B9%E6%B3%95%E5%90%8C%E6%97%B6%E8%8E%B7%E5%8F%96%E6%95%B0%E7%BB%84%E6%9C%80%E5%A4%A7%E5%80%BC%E5%92%8C%E6%9C%80%E5%B0%8F%E5%80%BC"><span class="toc-number">7.5.</span> <span class="toc-text">7.5 方法同时获取数组最大值和最小值</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/Java-Logo.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>

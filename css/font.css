@@ -1,0 +1,9 @@
+/*@font-face{
+    font-family: 'xiaoke';
+    font-display: swap;
+    src: url('../font/xiaoke.ttf') format("truetype");
+}
+*/
+body {
+    font-family: "Microsoft YaHei";
+}

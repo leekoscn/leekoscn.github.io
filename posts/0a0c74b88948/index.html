@@ -1,0 +1,306 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>CSRF漏洞 | Tranquility</title><meta name="keywords" content="CSRF漏洞"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="CSRF漏洞CSRF（Cross-site request forgery）跨站请求伪造，也被称为One Click Attack 或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。尽管听起来像跨站脚本（XSS），但它与XSS非常 不同，XSS利用站点内的信任用户，而CSRF则通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSRF漏洞">
+<meta property="og:url" content="https://leekoscn.github.io/posts/0a0c74b88948/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="CSRF漏洞CSRF（Cross-site request forgery）跨站请求伪造，也被称为One Click Attack 或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。尽管听起来像跨站脚本（XSS），但它与XSS非常 不同，XSS利用站点内的信任用户，而CSRF则通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/hello-world.webp">
+<meta property="article:published_time" content="2023-08-22T10:05:22.486Z">
+<meta property="article:modified_time" content="2023-06-05T06:42:11.875Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="CSRF漏洞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/hello-world.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/0a0c74b88948/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CSRF漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-05 14:42:11'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/hello-world.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">CSRF漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-22T10:05:22.486Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-05T06:42:11.875Z" title="更新于 2023-06-05 14:42:11">2023-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="CSRF漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/GM9dmatw8sDLx2g.jpg" alt="v2-36fa2f6e2cfee19373dd2e8caf628892_1440w"></p>
+<h2 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a>CSRF漏洞</h2><p>CSRF（Cross-site request forgery）跨站请求伪造，也被称为One Click Attack 或者Session Riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。尽管听起来像跨站脚本（XSS），但它与XSS非常 不同，XSS利用站点内的信任用户，而CSRF则通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击性往往不大流行（因此对其进行防范的资源也相对少）和难以防范，所以被认为比XSS更具危险性。</p>
+<h3 id="漏洞简介"><a href="#漏洞简介" class="headerlink" title="漏洞简介"></a>漏洞简介</h3><p>跨站请求攻击，简单地说，是攻击者通过一些技术手段欺骗用户的浏览器去访问一个自己曾经认证过的网站并执行一些操作（如发邮件、发消息、甚至财产操作：转账、购买商品等）。由于浏览器曾经认证过，所以被访问的网站会认为是真正的用户操作而去执行。这利用了web中用户身份认证的一个漏洞：简单的身份验证只能保证请求发自某个用户的浏览器，却不能保证请求本身是用户自愿发出的。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/Cvq8Yls9Of7HMmN.png" alt="1660149231_62f3ddef64a9f39744d07"></p>
+<h3 id="CSRF攻击原理及过程："><a href="#CSRF攻击原理及过程：" class="headerlink" title="CSRF攻击原理及过程："></a>CSRF攻击原理及过程：</h3><blockquote>
+<p>1.用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A；</p>
+<p>2.在用户信息用过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可以正常发送请求到网站A；</p>
+<p>3.用户未退出网站A之前，在同一浏览器中打开一个TAB页访问网站B；</p>
+<p>4.网站B接受到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点A；</p>
+<p>5.浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下携带Cookie信息，向网站A发出请求。网站A并不知道该请求其实是由B发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站B的恶意代码被执行。</p>
+</blockquote>
+<h2 id="CSRF攻击实例"><a href="#CSRF攻击实例" class="headerlink" title="CSRF攻击实例"></a>CSRF攻击实例</h2><p>受害者 Bob 在银行有一笔存款，通过对银行的网站发送请求<a target="_blank" rel="noopener" href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=bob2%E5%8F%AF%E4%BB%A5%E4%BD%BFBob%E6%8A%8A1000000">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=bob2可以使Bob把1000000</a> 的存款转到bob2的账号下。通常情况下，该请求发送到网站后，服务器会先验证该请求是否来自一个合法的 session，并且该session 的用户Bob已经成功登陆。</p>
+<p>黑客 Mallory 自己在该银行也有账户，他知道上文中的 URL 可以把钱进行转帐操作。Mallory 可以自己发送一个请求给银行：<a target="_blank" rel="noopener" href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory%E3%80%82%E4%BD%86%E6%98%AF%E8%BF%99%E4%B8%AA%E8%AF%B7%E6%B1%82%E6%9D%A5%E8%87%AA">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory。但是这个请求来自</a> Mallory 而非 Bob，他不能通过安全认证，因此该请求不会起作用。</p>
+<p>这时，Mallory 想到使用CSRF的攻击方式，他先自己做一个网站，在网站中放入如下代码： src=”<a target="_blank" rel="noopener" href="http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory%E2%80%9D%EF%BC%8C%E5%B9%B6%E4%B8%94%E9%80%9A%E8%BF%87%E5%B9%BF%E5%91%8A%E7%AD%89%E8%AF%B1%E4%BD%BF">http://bank.example/withdraw?account=bob&amp;amount=1000000&amp;for=Mallory”，并且通过广告等诱使</a> Bob 来访问他的网站。当 Bob 访问该网站时，上述 url 就会从Bob的浏览器发向银行，而这个请求会附带Bob浏览器中的cookie一起发向银行服务器。大多数情况下，该请求会失败，因为他要求Bob的认证信息。但是，如果Bob当时恰巧刚访问他的银行后不久，他的浏览器与银行网站之间的session尚未过期，浏览器的cookie之中含有Bob的认证信息。这时，悲剧发生了，这个url请求就会得到响应，钱将从Bob的账号转移到Mallory的账号，而Bob当时毫不知情。等以后Bob发现账户钱少了，即使他去银行查询日志，他也只能发现确实有一个来自于他本人的合法请求转移了资金，没有任何被攻击的痕迹。而Mallory则可以拿到钱后逍遥法外。</p>
+<h2 id="CSRF漏洞检测"><a href="#CSRF漏洞检测" class="headerlink" title="CSRF漏洞检测"></a>CSRF漏洞检测</h2><p>1.检测CSRF漏洞是一项比较繁琐的工作，最简单的方法就是抓取一个正常请求的数据包，去掉Referer字段后再重新提交，如果该提交还有效，那么基本上可以确定存在CSRF漏洞。</p>
+<p>2.随着对CSRF漏洞研究的不断深入，不断涌现出一些专门针对CSRF漏洞检测的工具，若CSRFTester，CSRF Request Builder等。</p>
+<h3 id="漏洞危害"><a href="#漏洞危害" class="headerlink" title="漏洞危害"></a>漏洞危害</h3><blockquote>
+<p>修改用户信息</p>
+<p>执行恶意操作</p>
+<p>盗取用户隐私数据</p>
+<p>作为其他攻击向量的辅助攻击手法</p>
+<p> 传播CSRF蠕虫</p>
+</blockquote>
+<h3 id="防御CSRF攻击"><a href="#防御CSRF攻击" class="headerlink" title="防御CSRF攻击"></a>防御CSRF攻击</h3><p><strong>目前防御CSRF攻击主要有三种策略：</strong></p>
+<blockquote>
+<p>1.验证HTTP Referer字段；</p>
+<p>2.在请求地址中添加token并验证；</p>
+<p>3.在HTTP头中自定义属性并验证。</p>
+</blockquote>
+<p><strong>CSRF与XSS的区别：最大的区别就是CSRF没有盗取用户的Cookie，而是直接的利用了浏览器的Cookie让用户去执行某个动作。</strong></p>
+<h2 id="CSRF挖掘技巧"><a href="#CSRF挖掘技巧" class="headerlink" title="CSRF挖掘技巧"></a>CSRF挖掘技巧</h2><p>漏洞条件</p>
+<blockquote>
+<p>1.被害用户已经完成身份认证</p>
+<p>2.新请求的提交不需要重新身份认证或确认机制</p>
+<p>3.攻击者必须了解Web APP请求的参数构造</p>
+<p>4.引诱用户触发攻击的指令（社工）</p>
+</blockquote>
+<p>各种功能点</p>
+<blockquote>
+<p>密码修改处</p>
+<p>点赞</p>
+<p>转账</p>
+<p>注销</p>
+<p>删除</p>
+</blockquote>
+<h2 id="pikachu-csrf"><a href="#pikachu-csrf" class="headerlink" title="pikachu csrf"></a>pikachu csrf</h2><h3 id="csrf-get"><a href="#csrf-get" class="headerlink" title="csrf (get)"></a>csrf (get)</h3><p>首先，先登录：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/FOvE6ks2IVWcUJ5.png" alt="image-20221217184549587"></p>
+<p>点击修改信息，修改后使用bp抓包</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/fph1sncgN9auiY8.png" alt="image-20221217184645056"></p>
+<p>我们发现，我们修改的数据都出现在了url中，所以我们只需要修改url中相关参数的值，即可修改数据</p>
+<p>这里，我们登录之后，然后修改数据时，向服务器发送了一条数据包，所以我们可以利用csrf漏洞，诱导登录之后的用户，访问带有该url即可实现修改数据的目的。</p>
+<p>我们可以将该url 写在我们的服务器上，当用户被诱导访问我们的网页，且此时已经登录时，触发该url发送数据包。即可修改数据。</p>
+<p>我在服务器上建立了一个x.html的文件，里面写入一个a标签，当点击时，触发修改数据的链接</p>
+<p>注意：要将 &amp; 进行html实体编码， &amp; 在html中有特殊含义，否则会报错</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/ygfLTZwUvQ98cbP.png" alt="image-20221217190418459"></p>
+<p>当我们登录时：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/7OM3feWYntwTAJE.png" alt="image-20221217190734435"></p>
+<p>此时，如果受害者在同一浏览器访问服务器上的页面，</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/JHx4kWQ7hdynuDv.png" alt="image-20221217190939162" style="zoom:33%;" />
+
+<p>并且点击时，此时就会导致数据被修改</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/PiqmzZd4lOvSwf9.png" alt="image-20221217191028038" style="zoom:33%;" />
+
+
+
+<h3 id="csrf-post"><a href="#csrf-post" class="headerlink" title="csrf (post)"></a>csrf (post)</h3><p>修改信息后，bp抓包</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/f4o1Wr8QOxBR6NK.png" alt="image-20221217191134434"></p>
+<p>此时，我们可以使用bp自带的构造csrf的功能</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/KWOIuH5loTnf6eB.png" alt="image-20221217191533935" style="zoom:33%;" />
+
+<p>点击生成CSRF PoC</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/hroIREmiVH4QglO.png" alt="image-20221217191616892" style="zoom: 25%;" />
+
+<p>自动生成了相关代码，我们直接复制放到 服务器上即可</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/Azq1oMnaIj3UmY9.png" alt="image-20221217191730182" style="zoom:33%;" />
+
+<p>当用户登录时，访问我们的网站，点击该按钮，就会修改数据</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/12/17/1vILMiRONkdB2j4.png" alt="image-20221217192000213" style="zoom:33%;" />
+
+
+
+<h3 id="csrf-token"><a href="#csrf-token" class="headerlink" title="csrf (token)"></a>csrf (token)</h3><p>修改数据，并抓包，发现url中带有 token，</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/4ITx7Q3mGh82KwP.png" alt="image-20221217192126924"></p>
+<p>这一关使用token验证，首先服务器生成一个token并且返回给客户端，当我们修改数据，发送数据包到服务器时，请求会携带token并且与服务器的token相比较，如果相等就可以修改数据</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/12/17/QxthkMosm38BpbG.png" alt="image-20221217192504094"></p>
+<p>每一次刷新，token都会改变，带有token的 csrf 相对难绕过</p>
+<h3 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/341591.html">相关链接</a></h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/0a0c74b88948/">https://leekoscn.github.io/posts/0a0c74b88948/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CSRF%E6%BC%8F%E6%B4%9E/">CSRF漏洞</a></div><div class="post_share"><div class="social-share" data-image="/img/hello-world.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/24161dd2cd58/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">ctfhub_SSRF漏洞</div></div></a></div><div class="next-post pull-right"><a href="/posts/8c9738c49145/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.</span> <span class="toc-text">CSRF漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">漏洞简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSRF%E6%94%BB%E5%87%BB%E5%8E%9F%E7%90%86%E5%8F%8A%E8%BF%87%E7%A8%8B%EF%BC%9A"><span class="toc-number">1.2.</span> <span class="toc-text">CSRF攻击原理及过程：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF%E6%94%BB%E5%87%BB%E5%AE%9E%E4%BE%8B"><span class="toc-number">2.</span> <span class="toc-text">CSRF攻击实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF%E6%BC%8F%E6%B4%9E%E6%A3%80%E6%B5%8B"><span class="toc-number">3.</span> <span class="toc-text">CSRF漏洞检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%8D%B1%E5%AE%B3"><span class="toc-number">3.1.</span> <span class="toc-text">漏洞危害</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1CSRF%E6%94%BB%E5%87%BB"><span class="toc-number">3.2.</span> <span class="toc-text">防御CSRF攻击</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF%E6%8C%96%E6%8E%98%E6%8A%80%E5%B7%A7"><span class="toc-number">4.</span> <span class="toc-text">CSRF挖掘技巧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pikachu-csrf"><span class="toc-number">5.</span> <span class="toc-text">pikachu csrf</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#csrf-get"><span class="toc-number">5.1.</span> <span class="toc-text">csrf (get)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csrf-post"><span class="toc-number">5.2.</span> <span class="toc-text">csrf (post)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#csrf-token"><span class="toc-number">5.3.</span> <span class="toc-text">csrf (token)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="toc-number">5.4.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/hello-world.webp')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>

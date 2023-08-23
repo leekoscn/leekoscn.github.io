@@ -1,0 +1,433 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>小迪-day12(SQL注入简要概述) | Tranquility</title><meta name="keywords" content="小迪-day12(SQL注入简要概述)"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1、相关sql函数、语句1.1  count()1.1.1 count(column_name)​    count(column_name)是计算数据库表中指定列有多少行， ​    例：  SELECT COUNT(column_name) FROM table_name    1.1.2 count(*)可以计算表中有多少行（有多少条数据）表中记录数 1.2 sum()返回数值列的总和（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小迪-day12(SQL注入简要概述)">
+<meta property="og:url" content="https://leekoscn.github.io/posts/f388d9706d1c/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="1、相关sql函数、语句1.1  count()1.1.1 count(column_name)​    count(column_name)是计算数据库表中指定列有多少行， ​    例：  SELECT COUNT(column_name) FROM table_name    1.1.2 count(*)可以计算表中有多少行（有多少条数据）表中记录数 1.2 sum()返回数值列的总和（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/hello-world.webp">
+<meta property="article:published_time" content="2023-08-22T10:05:22.609Z">
+<meta property="article:modified_time" content="2023-06-05T06:42:12.603Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="小迪-day12(SQL注入简要概述)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/hello-world.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/f388d9706d1c/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小迪-day12(SQL注入简要概述)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-05 14:42:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/hello-world.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">小迪-day12(SQL注入简要概述)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-22T10:05:22.609Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-05T06:42:12.603Z" title="更新于 2023-06-05 14:42:12">2023-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="小迪-day12(SQL注入简要概述)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/ZX8G9bETWCt2VRM.png" alt="web-漏洞小迪安全.png" style="zoom:67%;" />
+
+<h1 id="1、相关sql函数、语句"><a href="#1、相关sql函数、语句" class="headerlink" title="1、相关sql函数、语句"></a>1、相关sql函数、语句</h1><h2 id="1-1-count"><a href="#1-1-count" class="headerlink" title="1.1  count()"></a>1.1  count()</h2><h3 id="1-1-1-count-column-name"><a href="#1-1-1-count-column-name" class="headerlink" title="1.1.1 count(column_name)"></a>1.1.1 count(<em>column_name</em>)</h3><p>​    count(<em>column_name</em>)是计算数据库表中指定列有多少行，</p>
+<p>​    例： </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT COUNT(column_name) FROM table_name</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-1-2-count"><a href="#1-1-2-count" class="headerlink" title="1.1.2 count(*)"></a>1.1.2 count(*)</h3><p>可以计算表中有多少行（有多少条数据）表中记录数</p>
+<h2 id="1-2-sum"><a href="#1-2-sum" class="headerlink" title="1.2 sum()"></a>1.2 sum()</h2><p>返回数值列的总和（只能运用于数值列）</p>
+<h2 id="1-3-exists"><a href="#1-3-exists" class="headerlink" title="1.3 exists()"></a>1.3 exists()</h2><p>exists()用于判断查询字句是否有记录，如果有一条或多条记录，则返回True，没有记录则返回False</p>
+<h3 id="EXISTS-语法"><a href="#EXISTS-语法" class="headerlink" title="EXISTS 语法"></a>EXISTS 语法</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name(s)</span><br><span class="line"><span class="keyword">FROM</span> table_name</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">EXISTS</span></span><br><span class="line">(<span class="keyword">SELECT</span> column_name <span class="keyword">FROM</span> table_name <span class="keyword">WHERE</span> <span class="keyword">condition</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-4-order-by"><a href="#1-4-order-by" class="headerlink" title="1.4 order by"></a>1.4 order by</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ORDER BY 语句用于根据指定的  列  对结果集进行排序。</span><br><span class="line"></span><br><span class="line">ORDER BY 语句默认按照升序对记录进行排序。</span><br><span class="line"></span><br><span class="line">如果您希望按照降序对记录进行排序，可以使用 DESC 关键字。</span><br></pre></td></tr></table></figure>
+
+<p>order by 根据<strong>列</strong>来进行排序，后面跟上    列名 asc(升序，默认)/desc（降序）</p>
+<p>例如：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> Company, OrderNumber <span class="keyword">FROM</span> Orders <span class="keyword">ORDER</span> <span class="keyword">BY</span> Company</span><br></pre></td></tr></table></figure>
+
+<p>如果order by 后面的列数，大于表的列数，就会报错。</p>
+<p>可以在order by 后面写数字，代表一个临时的列（详见标题2），如果数字数大于表的列数就会报错</p>
+<p>例如：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/qovjMO68S4bLWhY.png" alt="image-20221108183335707" style="zoom:33%;" />
+
+<p>此时有1，2，3，4四个数字代表四个临时列，由于表只有三个列，所以报错</p>
+<h2 id="1-5-union"><a href="#1-5-union" class="headerlink" title="1.5 union"></a>1.5 union</h2><p>union 联合查询，将多条查询语句的结果集放在一个表中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">UNION 操作符用于合并两个或多个 SELECT 语句的结果集。</span><br><span class="line"></span><br><span class="line">请注意，UNION 内部的每个 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每个 SELECT 语句中的列的顺序必须相同。</span><br></pre></td></tr></table></figure>
+
+<h3 id="SQL-UNION-语法"><a href="#SQL-UNION-语法" class="headerlink" title="SQL UNION 语法"></a>SQL UNION 语法</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name(s) <span class="keyword">FROM</span> table1</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> column_name(s) <span class="keyword">FROM</span> table2;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注释：</strong>默认地，UNION 操作符选取不同的值（结果集中没有重复的）。</p>
+<p>​            如果允许重复的值，请使用 <strong>UNION ALL</strong>。</p>
+<h3 id="SQL-UNION-ALL-语法"><a href="#SQL-UNION-ALL-语法" class="headerlink" title="SQL UNION ALL 语法"></a>SQL UNION ALL 语法</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span>column_name(s)<span class="operator">*</span> <span class="keyword">FROM</span> <span class="operator">*</span>table1<span class="operator">*</span></span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span>column_name(s)<span class="operator">*</span> <span class="keyword">FROM</span> <span class="operator">*</span>table2<span class="operator">*</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注释：</strong>UNION 结果集中的列名总是等于 UNION 中第一个 SELECT 语句中的列名。</p>
+<h2 id="1-6-group-concat"><a href="#1-6-group-concat" class="headerlink" title="1.6 group_concat()"></a>1.6 group_concat()</h2><p>group_concat()函数可以将组中的字符串连接成为具有各种选项的单个字符串。</p>
+<p>最简单用法，可以把多个结果用逗号分开，形成一个字符串</p>
+<h1 id="2、语句-select-1-from-是什么？"><a href="#2、语句-select-1-from-是什么？" class="headerlink" title="2、语句 select 1 from  是什么？"></a>2、语句 select 1 from  是什么？</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select 1 from ...   与 select anycol(目的表集合中的任意一行）from ...  </span><br><span class="line">与 select * from ...  都可以用来查询数据是否有记录</span><br></pre></td></tr></table></figure>
+
+<p>select 1 from 中的1是一常量（可以为任意数值），查到的所有行的值都是它，<strong>但从效率上来说，1&gt;anycol&gt;*，因为不用查字典表</strong>。</p>
+<h2 id="测试场景："><a href="#测试场景：" class="headerlink" title="测试场景："></a><strong>测试场景：</strong></h2><p>kc表是一个数据表，假设表的行数为10行。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/o5WOMmjNvEsld94.jpg" alt="img"></p>
+<p><strong>1：select 1 from kc   增加临时列，每行的列值是写在select后的数，这条sql语句中是1</strong></p>
+<p><strong>2：select count(1) from kc  不管count(a)的a值如何变化，得出的值总是kc表的行数</strong></p>
+<p><strong>3：select sum(1) from kc  计算临时列的和</strong></p>
+<p> 在MySQL中用 1 测试了一下，发现结果如下：</p>
+<p>1：测试结果，得出一个行数和kc表行数一样的临时列（暂且这么叫，我也不知道该叫什么），每行的列值是1；</p>
+<p>2：得出一个数，该数是kc表的行数；</p>
+<p>3：得出一个数，该数是kc表的行数；</p>
+<p>然后我又用“2”测试，结果如下：</p>
+<p>1：得出一个行数和kc表行数一样的临时列，每行的列值是2；</p>
+<p>2：得出一个数，该数是kc表的行数；</p>
+<p>3：得出一个数，该数是kc表的行数×2的数</p>
+<p>然后我又用更大的数测试：</p>
+<p>1：得出一个行数和kc表行数一样的临时列，每行的列值是我写在select后的数；</p>
+<p>2：还是得出一个数，该数是kc表的行数；</p>
+<p>3：得出一个数，该数是table表的行数×写在select后的数</p>
+<p><strong>结果图：</strong></p>
+<p><strong><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/vAiHyD2wtX8fjOK.jpg" alt="img" style="zoom:50%;" /></strong></p>
+<p><strong><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/cBtN5WGTurUaIXA.jpg" alt="img" style="zoom:50%;" /><br> 注意观察下面的两幅图的区别。</strong></p>
+<p>**<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/RJhjsC491y2wVmS.jpg" alt="img" style="zoom:50%;" /><br>** </p>
+<p>**<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/ftb8u9nkSK6M1PI.jpg" alt="img" style="zoom:50%;" /></p>
+<p>** </p>
+<h2 id="综上所述："><a href="#综上所述：" class="headerlink" title="综上所述："></a><strong>综上所述：</strong></h2><p>​    <strong>第一种的写法是增加临时列，每行的列值是写在select后的数；第二种是不管count(a)的a值如何变化，得出的值总是table表的行数；第三种是计算临时列的和</strong>。</p>
+<p>​    当不需要知道结果是什么，只需要知道有没有结果的时候，可以使用select 1 作为子查询结果是否存在判断，这样可以提高性能。</p>
+<h1 id="3、SQL注入"><a href="#3、SQL注入" class="headerlink" title="3、SQL注入"></a>3、SQL注入</h1><h2 id="1-1-前言"><a href="#1-1-前言" class="headerlink" title="1.1 前言"></a>1.1 前言</h2><p>​    SQL注入漏洞将是重点部分，其中SQL注入又非常复杂，区分各种数据库类型，提交方法，数据类型等注入，我们需要按部就班的学习，才能学会相关SQL注入的核心。同样此类漏洞是WEB安全中严重的安全漏洞，学习如何利用，挖掘，修复也是很重要的。</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/qpZzRKdtLDJEGkN.png" alt="SQL注入-小迪安全.png" style="zoom: 50%;" />
+
+
+
+<p>​    SQL注入简单的说就是，通过添加一些sql语句在一些原有sql语句中可注入的地方，达到改写sql语句功能的目的，从而获取到数据库相关信息（高危）</p>
+<h2 id="1-2-MySQL注入"><a href="#1-2-MySQL注入" class="headerlink" title="1.2 MySQL注入"></a>1.2 MySQL注入</h2><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/e2zLhvIgK85MciB.png" alt="mysql注入-小迪.png" style="zoom:50%;" />
+
+
+
+
+
+<h2 id="1-3-sqlilabs靶场搭建"><a href="#1-3-sqlilabs靶场搭建" class="headerlink" title="1.3 sqlilabs靶场搭建"></a>1.3 sqlilabs靶场搭建</h2><p>下载文件放进phpstudy的www文件下，然后该配置文件，更改数据库用户名，密码，</p>
+<p>然后进入靶场初始化数据库</p>
+<h3 id="实例：less-2"><a href="#实例：less-2" class="headerlink" title="实例：less-2"></a>实例：less-2</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/wKnEYINf7lFbuto.png" alt="image-20221108184147135"></p>
+<p>查看源码：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/u3E6FPSwCkJGqht.png" alt="image-20221108184248152" style="zoom: 33%;" />
+
+<p>发现源码中$id变量接受后没有做任何限制，为恶意sql注入创造了条件。</p>
+<p>查询数据库security可知，该数据库有4张表。</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/sOTHxQ46W8lVZBa.png" alt="image-20221108184544871" style="zoom:50%;" />
+
+<p>查询users表：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/bwNR8rjmUo6yW3g.png" alt="image-20221108184651816" style="zoom:33%;" />
+
+<p>查询emails表：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/zErfVLBxQ1FMUSe.png" alt="image-20221108184723978" style="zoom:33%;" />
+
+<p>在数据库中执行如下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select * from users where id=-1 union select 1,email_id,3 from emails limit 0,1;</span><br></pre></td></tr></table></figure>
+
+<p>可得：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/3M2mwQZk7EUi9Hv.png" alt="image-20221108184916746" style="zoom:50%;" />
+
+
+
+<p>***    如果执行如下语句：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select 1,email_id,3 from emails union select * from users;</span><br></pre></td></tr></table></figure>
+
+<p>则表结构为:</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/5lObDYhqiHEAjkt.png" alt="image-20221108190740724" style="zoom:50%;" />
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：如果使用union联合查询，产生表的列名为第一条select语句查询表的列名</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">解释：</span><br><span class="line">(limit 只显示第一条)</span><br><span class="line">此处令id = -1 目的是使前一条select语句查询不到结果,然后显示出后面的select语句</span><br><span class="line"></span><br><span class="line">语句：select 1,email_id,3 from emails </span><br><span class="line">1：代表临时产生的一列，放在结果集的第一列，列中的值为1</span><br><span class="line">email_id： 放在第二列</span><br><span class="line">3：代表临时产生的一列，放在结果集的第一列，列中的值为3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>将上述代码放在url中执行：可以将email查询到用户名中。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/WGoCr5suKFZRzcN.png" alt="image-20221108191426881"></p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/ebXK7rvldyH52pM.png" alt="image-20221108191320683" style="zoom: 33%;" />
+
+
+
+<p>注： url中 <strong>%20</strong> 代表空格</p>
+<h2 id="1-4-测试题"><a href="#1-4-测试题" class="headerlink" title="1.4 测试题:"></a>1.4 测试题:</h2><p>参数x有注入，以下那个注入测试正确?           a,b,c</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">a. www.xiaodi8.com/news.php?y=1 and 1=1&amp;x=2</span><br><span class="line"></span><br><span class="line">b. www.xiaodi8.com/news.php?y=1&amp;x=2 and 1=1</span><br><span class="line"></span><br><span class="line">c. www .xiaodi8.com/news.php?y=1 and 1=1&amp;x=2 and 1=1</span><br><span class="line"></span><br><span class="line">d. www .xiaodi8.com/news.php?xx=1 and 1=1&amp;xxx=2 and 1=1</span><br></pre></td></tr></table></figure>
+
+<p><strong>总结：</strong>可控变量，带入数据库查询，变量未存在过滤或过滤不严谨。</p>
+<h2 id="1-5-判断是否存在注入点？"><a href="#1-5-判断是否存在注入点？" class="headerlink" title="1.5 判断是否存在注入点？"></a>1.5 判断是否存在注入点？</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span>、逻辑值</span><br><span class="line">    <span class="keyword">and</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">1</span>		页面正常</span><br><span class="line">    <span class="keyword">and</span> <span class="number">1</span> <span class="operator">=</span> <span class="number">2</span>		页面异常</span><br><span class="line">    则可能存在注入点</span><br><span class="line">(在url中加入)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、<span class="keyword">order</span> <span class="keyword">by</span></span><br><span class="line">		通过<span class="keyword">order</span> <span class="keyword">by</span> 判断注入的字段数</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">order</span> <span class="keyword">by</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span> 如果<span class="number">1</span>，<span class="number">2</span>，<span class="number">3</span>不报错，<span class="number">1</span>，<span class="number">2</span>，<span class="number">3</span>，<span class="number">4</span>报错，说明该表中只有三列，存在<span class="keyword">sql</span>注入</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/NldjoUX49qRnT1G.png" alt="image-20221108192257428" style="zoom:33%;" />
+
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/b28opylBXFtmKGs.png" alt="image-20221108192154448" style="zoom:33%;" />
+
+
+
+
+
+<h2 id="1-6-信息收集"><a href="#1-6-信息收集" class="headerlink" title="1.6 信息收集"></a>1.6 信息收集</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sql获得相关信息</span><br><span class="line">数据库版本：version()</span><br><span class="line">数据库名字：database()</span><br><span class="line">数据库用户：user()</span><br><span class="line">操作系统：@@version_compile_os   		没有括号！</span><br></pre></td></tr></table></figure>
+
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/w3BdS2XZFJgMKci.png" alt="image-20221108192754857" style="zoom:33%;" />
+
+<p>直接在sql语句中写</p>
+<h2 id="1-7-MySQL-5-0-版本探测"><a href="#1-7-MySQL-5-0-版本探测" class="headerlink" title="1.7 MySQL 5.0+版本探测"></a>1.7 MySQL 5.0+版本探测</h2><p>在mysql5.0以后的版本</p>
+<p>存在一个<strong>information_schema</strong>数据库、里面有 所有<em>存储记录</em> 的  <strong>数据库名</strong>、<strong>表名</strong>、<strong>列名</strong>的数据库<br>相当于可以通过information_schema这个数据库获取到数据库下面的表名和列名。</p>
+<h3 id="1-7-1-获取相关信息"><a href="#1-7-1-获取相关信息" class="headerlink" title="1.7.1 获取相关信息"></a>1.7.1 获取相关信息</h3><p>可以使用 .  来调用子类</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">information_schema.tables			#information_schema下面的所有表名</span><br><span class="line">information_schema.columns			#information_schema下面所有的列名</span><br><span class="line">table_name										#表名</span><br><span class="line">column_name										#列名</span><br><span class="line">table_schema									#数据库名</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="1、查询security数据库下的所有表"><a href="#1、查询security数据库下的所有表" class="headerlink" title="1、查询security数据库下的所有表"></a>1、查询security数据库下的所有表</h4><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/km8XslvoFJxdYIh.png" alt="image-20221108194456608" style="zoom: 33%;" />
+
+<h4 id="2、查询users表下的所有列名"><a href="#2、查询users表下的所有列名" class="headerlink" title="2、查询users表下的所有列名"></a>2、查询users表下的所有列名</h4><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/DkSZCU4KTyxIV8p.png" alt="image-20221108195011327" style="zoom: 33%;" />
+
+
+
+
+
+<h2 id="1-8-墨者学院例题"><a href="#1-8-墨者学院例题" class="headerlink" title="1.8 墨者学院例题"></a>1.8 墨者学院例题</h2><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/YuT9EOB1eGHplLD.png" alt="image-20221109185634955" style="zoom:33%;" />
+
+
+
+<p>点进去发现里面有个公告</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/ClKgmyNZRYX3eGj.png" alt="image-20221109185824251" style="zoom:33%;" />
+
+
+
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/P5Fr1KVsv3lX8fO.png" alt="image-20221109185845745" style="zoom: 25%;" />
+
+<p><strong>?id=1</strong>    疑似sql注入点</p>
+<p>判断是否有sql注入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=1 and 1=1	正常</span><br><span class="line">?id=1 and 1=2 	异常</span><br></pre></td></tr></table></figure>
+
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/PlDuWjIcGMyhVs1.png" alt="image-20221109190047798" style="zoom:25%;" />
+
+<p>说明存在sql注入</p>
+<p>然后判断该表的字段数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=1 order by 1		...		?id=1 order by 4</span><br></pre></td></tr></table></figure>
+
+<p>当by后面的数字为5时，页面不正常，说明字段数为4</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/FqsIH8TzhcjtLZx.png" alt="image-20221109190305924" style="zoom: 25%;" />
+
+<p>然后判断回显的字段是哪几个？</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/YVedQtBSIXWk46O.png" alt="image-20221109190440960" style="zoom:25%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">使用union联合查询，注意此时让id=-1 查询不到前面的数据，则会把后半段select语句显示出来</span><br><span class="line">此处说明第二列和第三列会被显示</span><br></pre></td></tr></table></figure>
+
+
+
+<p>信息搜集：</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/o1VfsFgqildNHt7.png" alt="image-20221109190650848" style="zoom:25%;" />
+
+<p><strong>version()</strong>    查询mysql版本号，5.0+说明此处可以使用数据库    information_schema.tables/columns</p>
+<p><strong>database()</strong>    查询此数据库名称</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/6gdXVcsDljPRSEY.png" alt="image-20221109190909704" style="zoom:25%;" />
+
+<p><strong>user()</strong>    查询数据库用户名</p>
+<p><strong>@@version_compile_os</strong>    查询操作系统名称</p>
+<img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/1qg6PfX7FmprV9H.png" alt="image-20221109191151942" style="zoom:25%;" />
+
+
+
+<p>查询该数据库下的所有表，</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">table_name 代表	表   table_schema代表数据库,</span><br><span class="line">information_schema.tables	存储了所有表信息（5.0+）</span><br></pre></td></tr></table></figure>
+
+<p>查询该表下的所有字段(列)</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/ur6RBKVqYSpvLTf.png" alt="image-20221109191553480"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">column_name 代表列名</span><br><span class="line">information_schema.columns	存储了所有列信息（5.0+）</span><br></pre></td></tr></table></figure>
+
+<p>group_concat(列名)    把所有结果拼接</p>
+<h2 id="1-9-链接"><a href="#1-9-链接" class="headerlink" title="1.9 链接"></a>1.9 链接</h2><h3 id="1-9-1sqlilabs靶场相关解答"><a href="#1-9-1sqlilabs靶场相关解答" class="headerlink" title="1.9.1sqlilabs靶场相关解答"></a>1.9.1sqlilabs靶场相关解答</h3><p><a target="_blank" rel="noopener" href="https://www.yuque.com/office/yuque/0/2022/pdf/2476579/1647239035090-84752d34-43a3-4d21-953e-612760a5e4d7.pdf?from=https://www.yuque.com/weiker/xiaodi/geg7au">https://www.yuque.com/office/yuque/0/2022/pdf/2476579/1647239035090-84752d34-43a3-4d21-953e-612760a5e4d7.pdf?from=https%3A%2F%2Fwww.yuque.com%2Fweiker%2Fxiaodi%2Fgeg7au</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/f388d9706d1c/">https://leekoscn.github.io/posts/f388d9706d1c/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B0%8F%E8%BF%AA-day12-SQL%E6%B3%A8%E5%85%A5%E7%AE%80%E8%A6%81%E6%A6%82%E8%BF%B0/">小迪-day12(SQL注入简要概述)</a></div><div class="post_share"><div class="social-share" data-image="/img/hello-world.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/b6e16bf4bb82/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">小迪-day13(MySQL注入)</div></div></a></div><div class="next-post pull-right"><a href="/posts/f24c1e06fa11/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">命令执行-无字母数字webshell</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E7%9B%B8%E5%85%B3sql%E5%87%BD%E6%95%B0%E3%80%81%E8%AF%AD%E5%8F%A5"><span class="toc-number">1.</span> <span class="toc-text">1、相关sql函数、语句</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-count"><span class="toc-number">1.1.</span> <span class="toc-text">1.1  count()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-count-column-name"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 count(column_name)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-count"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.1.2 count(*)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-sum"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 sum()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-exists"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 exists()</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#EXISTS-%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">EXISTS 语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-order-by"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 order by</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-union"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 union</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-UNION-%E8%AF%AD%E6%B3%95"><span class="toc-number">1.5.1.</span> <span class="toc-text">SQL UNION 语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-UNION-ALL-%E8%AF%AD%E6%B3%95"><span class="toc-number">1.5.2.</span> <span class="toc-text">SQL UNION ALL 语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-group-concat"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 group_concat()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E8%AF%AD%E5%8F%A5-select-1-from-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">2、语句 select 1 from  是什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%9C%BA%E6%99%AF%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">测试场景：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E4%B8%8A%E6%89%80%E8%BF%B0%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">综上所述：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81SQL%E6%B3%A8%E5%85%A5"><span class="toc-number">3.</span> <span class="toc-text">3、SQL注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E5%89%8D%E8%A8%80"><span class="toc-number">3.1.</span> <span class="toc-text">1.1 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-MySQL%E6%B3%A8%E5%85%A5"><span class="toc-number">3.2.</span> <span class="toc-text">1.2 MySQL注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-sqlilabs%E9%9D%B6%E5%9C%BA%E6%90%AD%E5%BB%BA"><span class="toc-number">3.3.</span> <span class="toc-text">1.3 sqlilabs靶场搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%EF%BC%9Aless-2"><span class="toc-number">3.3.1.</span> <span class="toc-text">实例：less-2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E6%B5%8B%E8%AF%95%E9%A2%98"><span class="toc-number">3.4.</span> <span class="toc-text">1.4 测试题:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%B3%A8%E5%85%A5%E7%82%B9%EF%BC%9F"><span class="toc-number">3.5.</span> <span class="toc-text">1.5 判断是否存在注入点？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">3.6.</span> <span class="toc-text">1.6 信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-MySQL-5-0-%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B"><span class="toc-number">3.7.</span> <span class="toc-text">1.7 MySQL 5.0+版本探测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-1-%E8%8E%B7%E5%8F%96%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF"><span class="toc-number">3.7.1.</span> <span class="toc-text">1.7.1 获取相关信息</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%9F%A5%E8%AF%A2security%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E8%A1%A8"><span class="toc-number">3.7.1.1.</span> <span class="toc-text">1、查询security数据库下的所有表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%9F%A5%E8%AF%A2users%E8%A1%A8%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E5%88%97%E5%90%8D"><span class="toc-number">3.7.1.2.</span> <span class="toc-text">2、查询users表下的所有列名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-%E5%A2%A8%E8%80%85%E5%AD%A6%E9%99%A2%E4%BE%8B%E9%A2%98"><span class="toc-number">3.8.</span> <span class="toc-text">1.8 墨者学院例题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-9-%E9%93%BE%E6%8E%A5"><span class="toc-number">3.9.</span> <span class="toc-text">1.9 链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-1sqlilabs%E9%9D%B6%E5%9C%BA%E7%9B%B8%E5%85%B3%E8%A7%A3%E7%AD%94"><span class="toc-number">3.9.1.</span> <span class="toc-text">1.9.1sqlilabs靶场相关解答</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/hello-world.webp')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>

